@@ -8,6 +8,8 @@ import { logError } from '../lib/logging';
 
 const { regex } = constants;
 
+const idType = 'uuid';
+
 /**
  * Route the call to '/resource', '/resource/{id}' and '/resource/{action}/{id}' end points
  *
@@ -39,7 +41,7 @@ export async function router(event, context, callback) {
 
   if (pathParameters) {
     let { action: stringToTest } = pathParameters;
-    if (regex.bioguide.test(stringToTest)) {
+    if (regex[idType].test(stringToTest)) {
       id = pathParameters.action;
     } else {
       action = pathParameters.action;
