@@ -1,4 +1,4 @@
-service: bz-main
+service: mapapp-main
 
 # Use the serverless-webpack plugin to transpile ES6
 plugins:
@@ -25,15 +25,15 @@ provider:
   region: us-west-2
   environment:
     STAGE: ${opt:stage}
-    DB_NAME: ${ssm:/bluezone/${opt:stage}/postgres/db}
-    DB_HOST: ${ssm:/bluezone/${opt:stage}/postgres/host}
-    DB_USER: ${ssm:/bluezone/${opt:stage}/postgres/user}
-    DB_PASS: ${ssm:/bluezone/${opt:stage}/postgres/pass}
+    DB_NAME: ${ssm:/mapapp/${opt:stage}/postgres/db}
+    DB_HOST: ${ssm:/mapapp/${opt:stage}/postgres/host}
+    DB_USER: ${ssm:/mapapp/${opt:stage}/postgres/user}
+    DB_PASS: ${ssm:/mapapp/${opt:stage}/postgres/pass}
   apiGateway:
     restApiId:
-      'Fn::ImportValue': apiGateway-restApiId
+      'Fn::ImportValue': MapAppApiGateway-restApiId
     restApiRootResourceId:
-      'Fn::ImportValue': apiGateway-rootResourceId
+      'Fn::ImportValue': MapAppApiGateway-rootResourceId
   # 'iamRoleStatements' defines the permission policy for the Lambda function.
   iamRoleStatements:
     - Effect: Allow
@@ -47,7 +47,7 @@ provider:
         - cognito-idp:AdminDeleteUser
         - cognito-idp:AdminGetUser
       Resource:
-        'Fn::ImportValue': CognitoUserPool-arn
+        'Fn::ImportValue': MapAppUserPool-arn
     - Effect: Allow
       Action:
         - lambda:InvokeFunction
@@ -73,22 +73,22 @@ functions:
           method: any
           cors: true
           authorizer: aws_iam
-  legislator:
-    handler: legislator.router
-    description: Endpoints for accessing legislator data
+  resource:
+    handler: resource.router
+    description: Endpoints for accessing resource data
     events:
       - http:
-          path: legislator
+          path: resource
           method: get
           cors: true
           authorizer: aws_iam
       - http:
-          path: legislator/{action}
+          path: resource/{action}
           method: get
           cors: true
           authorizer: aws_iam
       - http:
-          path: legislator/{action}/{id}
+          path: resource/{action}/{id}
           method: get
           cors: true
           authorizer: aws_iam

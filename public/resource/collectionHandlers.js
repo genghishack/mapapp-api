@@ -1,19 +1,19 @@
 import { buildResponse, success, failure } from '../../lib/response-lib';
-import * as legislatorLib from "../../lib/legislator";
+import * as resourceLib from "../../lib/resource";
 import {logError} from "../../lib/logging";
 
 // open to anonymous users
-async function listLegislators(user, id, data, params) {
+async function listResources(user, id, data, params) {
   let date = null;
   if (params && params.date) {
     ({ date } = params);
   }
 
-  let legislators = [];
+  let resources = [];
   try {
-    legislators = await legislatorLib.getAllLegislatorsByDate(date)
-    console.log('legislators: ', legislators);
-    return success({data: legislators, count: legislators.length});
+    resources = await resourceLib.getAllResourcesByDate(date)
+    console.log('resources: ', resources);
+    return success({data: resources, count: resources.length});
   } catch (e) {
     logError(e);
     return failure({message: e.message});
@@ -21,7 +21,7 @@ async function listLegislators(user, id, data, params) {
 }
 
 const collectionHandlers = {
-  GET: listLegislators,
+  GET: listResources,
 };
 
 export default collectionHandlers;

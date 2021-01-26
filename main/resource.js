@@ -1,6 +1,6 @@
-import collectionHandlers from './legislator/collectionHandlers';
-import itemHandlers from './legislator/itemHandlers';
-import actionHandlers from './legislator/actionHandlers';
+import collectionHandlers from './resource/collectionHandlers';
+import itemHandlers from './resource/itemHandlers';
+import actionHandlers from './resource/actionHandlers';
 import constants from '../lib/constants';
 import { getUserDataFromEvent } from '../lib/event';
 import { buildResponse, failure } from '../lib/response-lib';
@@ -9,7 +9,7 @@ import { logError } from '../lib/logging';
 const { regex } = constants;
 
 /**
- * Route the call to '/legislator', '/legislator/{id}' and '/legislator/{action}/{id}' end points
+ * Route the call to '/resource', '/resource/{id}' and '/resource/{action}/{id}' end points
  *
  * @export
  * @param {Object} event
@@ -17,7 +17,7 @@ const { regex } = constants;
  * @param {function} callback
  */
 export async function router(event, context, callback) {
-  const { httpMethod, pathParameters, queryStringParameters, body } = event;
+  const { httpMethod, pathParameters, body } = event;
 
   console.log('event: ', event);
   console.log('httpMethod: ', httpMethod);
@@ -28,9 +28,7 @@ export async function router(event, context, callback) {
   let id;
   let data;
 
-  // Calls to the 'legislator' set of endpoints are PUBLICLY ACCESSIBLE.
-  // const userData = await getUserDataFromEvent(event);
-  const userData = {};
+  const userData = await getUserDataFromEvent(event);
   console.log('userData: ', userData);
 
   if (body) {
@@ -39,15 +37,16 @@ export async function router(event, context, callback) {
 
   if (pathParameters) {
     let { action: stringToTest } = pathParameters;
-    if (regex.bioguide.test(stringToTest)) {
+    if (stringToTest.indexOf(':') !== -1) {
+      stringToTest = stringToTest.split(':')[1];
+    }
+    if (regex.uuid.test(stringToTest)) {
       id = pathParameters.action;
     } else {
       action = pathParameters.action;
       id = pathParameters.id;
     }
   }
-
-  // console.log('action: ', action, 'id: ', id);
 
   let response = buildResponse(405, {
     message: `Invalid HTTP Method: ${httpMethod}`,
@@ -63,9 +62,9 @@ export async function router(event, context, callback) {
   try {
     if (httpMethod in handlers) {
       if (!action) {
-        response = await handlers[httpMethod](userData, id, data, queryStringParameters);
+        response = await handlers[httpMethod](userData, id, data);
       } else if (action in handlers[httpMethod]) {
-        response = await handlers[httpMethod][action](userData, id, data, queryStringParameters);
+        response = await handlers[httpMethod][action](userData, id, data);
       } else {
         response = buildResponse(406, {
           message: `Invalid Request: ${httpMethod} ${action}`,
