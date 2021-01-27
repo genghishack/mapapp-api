@@ -11,7 +11,7 @@ async function listResources(user, id, data, params) {
 
   let resources = [];
   try {
-    resources = await resourceLib.getAllResourcesByDate(date)
+    resources = await resourceLib.getResources()
     console.log('resources: ', resources);
     return success({data: resources, count: resources.length});
   } catch (e) {
