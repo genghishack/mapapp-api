@@ -8,6 +8,9 @@ import { logError } from '../lib/logging';
 
 const { regex } = constants;
 
+const idType = 'uuid';
+const isPublic = false;
+
 /**
  * Route the call to '/resource', '/resource/{id}' and '/resource/{action}/{id}' end points
  *
@@ -28,7 +31,10 @@ export async function router(event, context, callback) {
   let id;
   let data;
 
-  const userData = await getUserDataFromEvent(event);
+  let userData = {};
+  if (!isPublic) {
+    userData = await getUserDataFromEvent(event);
+  }
   console.log('userData: ', userData);
 
   if (body) {
@@ -37,10 +43,7 @@ export async function router(event, context, callback) {
 
   if (pathParameters) {
     let { action: stringToTest } = pathParameters;
-    if (stringToTest.indexOf(':') !== -1) {
-      stringToTest = stringToTest.split(':')[1];
-    }
-    if (regex.uuid.test(stringToTest)) {
+    if (regex[idType].test(stringToTest)) {
       id = pathParameters.action;
     } else {
       action = pathParameters.action;

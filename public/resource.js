@@ -9,6 +9,8 @@ import { logError } from '../lib/logging';
 const { regex } = constants;
 
 const idType = 'uuid';
+// Calls to the 'public/resource' set of endpoints are PUBLICLY ACCESSIBLE.
+const isPublic = true;
 
 /**
  * Route the call to '/resource', '/resource/{id}' and '/resource/{action}/{id}' end points
@@ -30,9 +32,10 @@ export async function router(event, context, callback) {
   let id;
   let data;
 
-  // Calls to the 'resource' set of endpoints are PUBLICLY ACCESSIBLE.
-  // const userData = await getUserDataFromEvent(event);
-  const userData = {};
+  let userData = {};
+  if (!isPublic) {
+    userData = await getUserDataFromEvent(event);
+  }
   console.log('userData: ', userData);
 
   if (body) {
