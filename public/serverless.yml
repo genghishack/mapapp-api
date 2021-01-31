@@ -47,7 +47,7 @@ provider:
         - cognito-idp:AdminDeleteUser
         - cognito-idp:AdminGetUser
       Resource:
-        'Fn::ImportValue': CognitoUserPool-arn
+        'Fn::ImportValue': MapAppUserPool-arn
     - Effect: Allow
       Action:
         - lambda:InvokeFunction

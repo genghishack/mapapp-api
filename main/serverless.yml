@@ -7,8 +7,9 @@ plugins:
   - serverless-dotenv-plugin
 
 package:
-  include:
-    - ../node_modules
+  individually: true
+#  include:
+#    - ../node_modules
 
 # serverless-webpack configuration
 # Enable auto-packing of external modules
@@ -79,16 +80,16 @@ functions:
     events:
       - http:
           path: resource
-          method: get
+          method: any
           cors: true
           authorizer: aws_iam
       - http:
           path: resource/{action}
-          method: get
+          method: any
           cors: true
           authorizer: aws_iam
       - http:
           path: resource/{action}/{id}
-          method: get
+          method: any
           cors: true
           authorizer: aws_iam
