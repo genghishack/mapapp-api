@@ -1,15 +1,19 @@
-import collectionHandlers from './legislator/collectionHandlers';
-import itemHandlers from './legislator/itemHandlers';
-import actionHandlers from './legislator/actionHandlers';
+import collectionHandlers from './resource/collectionHandlers';
+import itemHandlers from './resource/itemHandlers';
+import actionHandlers from './resource/actionHandlers';
 import constants from '../lib/constants';
-import { getUserDataFromEvent } from '../lib/event';
+import { getUserDataFromEvent } from '../lib/event-lib';
 import { buildResponse, failure } from '../lib/response-lib';
-import { logError } from '../lib/logging';
+import { logError } from '../lib/logging-lib';
 
 const { regex } = constants;
 
+const idType = 'uuid';
+// Calls to the 'public/resource' set of endpoints are PUBLICLY ACCESSIBLE.
+const isPublic = true;
+
 /**
- * Route the call to '/legislator', '/legislator/{id}' and '/legislator/{action}/{id}' end points
+ * Route the call to '/resource', '/resource/{id}' and '/resource/{action}/{id}' end points
  *
  * @export
  * @param {Object} event
@@ -17,7 +21,7 @@ const { regex } = constants;
  * @param {function} callback
  */
 export async function router(event, context, callback) {
-  const { httpMethod, pathParameters, body } = event;
+  const { httpMethod, pathParameters, queryStringParameters, body } = event;
 
   console.log('event: ', event);
   console.log('httpMethod: ', httpMethod);
@@ -28,9 +32,10 @@ export async function router(event, context, callback) {
   let id;
   let data;
 
-  // Calls to the 'legislator' set of endpoints are PUBLICLY ACCESSIBLE.
-  // const userData = await getUserDataFromEvent(event);
-  const userData = {};
+  let userData = {};
+  if (!isPublic) {
+    userData = await getUserDataFromEvent(event);
+  }
   console.log('userData: ', userData);
 
   if (body) {
@@ -39,7 +44,7 @@ export async function router(event, context, callback) {
 
   if (pathParameters) {
     let { action: stringToTest } = pathParameters;
-    if (regex.bioguide.test(stringToTest)) {
+    if (regex[idType].test(stringToTest)) {
       id = pathParameters.action;
     } else {
       action = pathParameters.action;
@@ -63,9 +68,9 @@ export async function router(event, context, callback) {
   try {
     if (httpMethod in handlers) {
       if (!action) {
-        response = await handlers[httpMethod](userData, id, data);
+        response = await handlers[httpMethod](userData, id, data, queryStringParameters);
       } else if (action in handlers[httpMethod]) {
-        response = await handlers[httpMethod][action](userData, id, data);
+        response = await handlers[httpMethod][action](userData, id, data, queryStringParameters);
       } else {
         response = buildResponse(406, {
           message: `Invalid Request: ${httpMethod} ${action}`,

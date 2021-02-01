@@ -1,4 +1,4 @@
-service: bz-public
+service: mapapp-public
 
 # Use the serverless-webpack plugin to transpile ES6
 plugins:
@@ -25,15 +25,15 @@ provider:
   region: us-west-2
   environment:
     STAGE: ${opt:stage}
-    DB_NAME: ${ssm:/bluezone/${opt:stage}/postgres/db}
-    DB_HOST: ${ssm:/bluezone/${opt:stage}/postgres/host}
-    DB_USER: ${ssm:/bluezone/${opt:stage}/postgres/user}
-    DB_PASS: ${ssm:/bluezone/${opt:stage}/postgres/pass}
+    DB_NAME: ${ssm:/mapapp/${opt:stage}/postgres/db}
+    DB_HOST: ${ssm:/mapapp/${opt:stage}/postgres/host}
+    DB_USER: ${ssm:/mapapp/${opt:stage}/postgres/user}
+    DB_PASS: ${ssm:/mapapp/${opt:stage}/postgres/pass}
   apiGateway:
     restApiId:
-      'Fn::ImportValue': apiGateway-restApiId
+      'Fn::ImportValue': MapAppApiGateway-restApiId
     restApiRootResourceId:
-      'Fn::ImportValue': apiGateway-rootResourceId
+      'Fn::ImportValue': MapAppApiGateway-rootResourceId
   # 'iamRoleStatements' defines the permission policy for the Lambda function.
   iamRoleStatements:
     - Effect: Allow
@@ -47,42 +47,26 @@ provider:
         - cognito-idp:AdminDeleteUser
         - cognito-idp:AdminGetUser
       Resource:
-        'Fn::ImportValue': CognitoUserPool-arn
+        'Fn::ImportValue': MapAppUserPool-arn
     - Effect: Allow
       Action:
         - lambda:InvokeFunction
       Resource: '*'
 
 functions:
-  legislator:
-    handler: legislator.router
-    description: Public endpoints for accessing legislator data
+  resource:
+    handler: resource.router
+    description: Public endpoints for accessing resource data
     events:
       - http:
-          path: public/legislator
+          path: public/resource
           method: get
           cors: true
       - http:
-          path: public/legislator/{action}
+          path: public/resource/{action}
           method: get
           cors: true
       - http:
-          path: public/legislator/{action}/{id}
-          method: get
-          cors: true
-  state:
-    handler: state.router
-    description: Public endpoints for accessing state data
-    events:
-      - http:
-          path: public/state
-          method: get
-          cors: true
-      - http:
-          path: public/state/{action}
-          method: get
-          cors: true
-      - http:
-          path: public/state/{action}/{id}
+          path: public/resource/{action}/{id}
           method: get
           cors: true
