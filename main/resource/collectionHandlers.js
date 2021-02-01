@@ -3,6 +3,9 @@ import * as resourceLib from '../../lib/resource-lib';
 import {logError} from "../../lib/logging-lib";
 
 async function createResource(user, id, data) {
+  if (user.type !== 'iam' && user.role !== 'User') {
+    return failure({message: 'No access'})
+  }
   let resource = {};
   try {
     resource = await resourceLib.createResource(user, data)
