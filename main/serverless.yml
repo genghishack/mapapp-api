@@ -30,6 +30,7 @@ provider:
     DB_HOST: ${ssm:/mapapp/${opt:stage}/postgres/host}
     DB_USER: ${ssm:/mapapp/${opt:stage}/postgres/user}
     DB_PASS: ${ssm:/mapapp/${opt:stage}/postgres/pass}
+    MAPQUEST_API_KEY: ${ssm:/mapapp/${opt:stage}/mapquest/key}
   apiGateway:
     restApiId:
       'Fn::ImportValue': MapAppApiGateway-restApiId
