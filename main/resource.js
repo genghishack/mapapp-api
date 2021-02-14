@@ -2,7 +2,7 @@ import collectionHandlers from './resource/collectionHandlers';
 import itemHandlers from './resource/itemHandlers';
 import actionHandlers from './resource/actionHandlers';
 import constants from '../constants';
-import { getUserDataFromEvent } from '../lib/event-lib';
+import { getUserFromEvent } from '../lib/event-lib';
 import { buildResponse, failure } from '../lib/response-lib';
 import { logError } from '../lib/logging-lib';
 
@@ -33,7 +33,7 @@ export async function router(event, context, callback) {
 
   let userData = {};
   if (!isPublic) {
-    userData = await getUserDataFromEvent(event);
+    userData = await getUserFromEvent(event);
   }
   console.log('userData: ', userData);
 
