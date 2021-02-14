@@ -1,7 +1,7 @@
 import collectionHandlers from './foo/collectionHandlers';
 import itemHandlers from './foo/itemHandlers';
 import actionHandlers from './foo/actionHandlers';
-import constants from '../lib/constants';
+import constants from '../constants';
 import { getUserDataFromEvent } from '../lib/event-lib';
 import { buildResponse, failure } from '../lib/response-lib';
 import { logError } from '../lib/logging-lib';
