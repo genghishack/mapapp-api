@@ -1,6 +1,6 @@
 import { buildResponse, success, failure } from '../../lib/response-lib';
-import * as resourceLib from '../../lib/resource-lib';
-import {logError} from "../../lib/logging-lib";
+import * as resourceLib from '../../lib/queries/resource-lib';
+import {logDebug, logError} from "../../lib/logging-lib";
 
 async function createResource(user, id, data) {
   if (user.type !== 'iam' && user.role !== 'User') {
@@ -9,7 +9,7 @@ async function createResource(user, id, data) {
   let resource = {};
   try {
     resource = await resourceLib.createResource(user, data)
-    console.log({resource});
+    logDebug({resource});
     return success({data: resource, count: 1});
   } catch (e) {
     logError(e)

@@ -1,5 +1,5 @@
 import { buildResponse, success, failure } from '../../lib/response-lib';
-import * as resourceLib from "../../lib/resource-lib";
+import * as resourceLib from "../../lib/queries/resource-lib";
 import {logError} from "../../lib/logging-lib";
 
 // open to anonymous users
@@ -12,7 +12,7 @@ async function listResources(user, id, data, params) {
   let resources = [];
   try {
     resources = await resourceLib.getResources()
-    console.log('resources: ', resources);
+    logDebug({resources});
     return success({data: resources, count: resources.length});
   } catch (e) {
     logError(e);
