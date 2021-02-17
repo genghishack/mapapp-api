@@ -9,7 +9,7 @@ async function createResource(user, id, data) {
   let resource = {};
   try {
     resource = await resourceLib.createResource(user, data)
-    logDebug({resource});
+    // logDebug({resource});
     return success({data: resource, count: 1});
   } catch (e) {
     logError(e)

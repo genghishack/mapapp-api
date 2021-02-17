@@ -12,7 +12,7 @@ async function listResources(user, id, data, params) {
   let resources = [];
   try {
     resources = await resourceLib.getResources()
-    logDebug({resources});
+    // logDebug({resources});
     return success({data: resources, count: resources.length});
   } catch (e) {
     logError(e);

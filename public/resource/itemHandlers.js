@@ -7,7 +7,7 @@ async function getResource(user, id) {
   let resource = {};
   try {
     resource = await resourceLib.getResource(id);
-    logDebug({resource});
+    // logDebug({resource});
     return success({data: resource, count: 1});
   } catch (e) {
     logError(e);
