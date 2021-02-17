@@ -1,9 +1,9 @@
 {
-  "name": "bluezone-api",
-  "version": "0.1.1",
-  "description": "Bluezone Serverless API",
+  "name": "mapapp-api",
+  "version": "0.2.0",
+  "description": "MapApp Serverless API",
   "author": "Chris Wade <genghishack@gmail.com>",
-  "repository": "https://github.com/genghishack/bluezone-api.git",
+  "repository": "https://github.com/genghishack/mapapp-api.git",
   "license": "GPL-3.0-or-later",
   "private": true,
   "devDependencies": {
@@ -49,8 +49,10 @@
   },
   "dependencies": {
     "aws-sdk": "^2.529.0",
+    "axios": "^0.21.1",
     "babel-runtime": "^6.26.0",
     "dotenv": "^8.2.0",
+    "mapquest-api": "0.0.2",
     "moment": "^2.24.0",
     "pg": "^7.12.1",
     "uuid": "^3.3.3"

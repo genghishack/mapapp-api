@@ -1,8 +1,8 @@
 import {LambdaRouter} from "../lib/lambda-lib";
-import FooHandlers from './foo/handlers';
+import ResourceHandlers from './resource/handlers';
 
 export const router = LambdaRouter({
-  handlers: FooHandlers,
+  handlers: ResourceHandlers,
   idType: 'uuid',
   isPublic: false
 });

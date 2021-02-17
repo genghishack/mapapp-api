@@ -1,4 +1,4 @@
-service: bz-main
+service: mapapp-main
 
 # Use the serverless-webpack plugin to transpile ES6
 plugins:
@@ -7,8 +7,9 @@ plugins:
   - serverless-dotenv-plugin
 
 package:
-  include:
-    - ../node_modules
+  individually: true
+#  include:
+#    - ../node_modules
 
 # serverless-webpack configuration
 # Enable auto-packing of external modules
@@ -25,15 +26,16 @@ provider:
   region: us-west-2
   environment:
     STAGE: ${opt:stage}
-    DB_NAME: ${ssm:/bluezone/${opt:stage}/postgres/db}
-    DB_HOST: ${ssm:/bluezone/${opt:stage}/postgres/host}
-    DB_USER: ${ssm:/bluezone/${opt:stage}/postgres/user}
-    DB_PASS: ${ssm:/bluezone/${opt:stage}/postgres/pass}
+    DB_NAME: ${ssm:/mapapp/${opt:stage}/postgres/db}
+    DB_HOST: ${ssm:/mapapp/${opt:stage}/postgres/host}
+    DB_USER: ${ssm:/mapapp/${opt:stage}/postgres/user}
+    DB_PASS: ${ssm:/mapapp/${opt:stage}/postgres/pass}
+    MAPQUEST_API_KEY: ${ssm:/mapapp/${opt:stage}/mapquest/key}
   apiGateway:
     restApiId:
-      'Fn::ImportValue': apiGateway-restApiId
+      'Fn::ImportValue': MapAppApiGateway-restApiId
     restApiRootResourceId:
-      'Fn::ImportValue': apiGateway-rootResourceId
+      'Fn::ImportValue': MapAppApiGateway-rootResourceId
   # 'iamRoleStatements' defines the permission policy for the Lambda function.
   iamRoleStatements:
     - Effect: Allow
@@ -47,7 +49,7 @@ provider:
         - cognito-idp:AdminDeleteUser
         - cognito-idp:AdminGetUser
       Resource:
-        'Fn::ImportValue': CognitoUserPool-arn
+        'Fn::ImportValue': MapAppUserPool-arn
     - Effect: Allow
       Action:
         - lambda:InvokeFunction
@@ -73,22 +75,22 @@ functions:
           method: any
           cors: true
           authorizer: aws_iam
-  legislator:
-    handler: legislator.router
-    description: Endpoints for accessing legislator data
+  resource:
+    handler: resource.router
+    description: Endpoints for accessing resource data
     events:
       - http:
-          path: legislator
-          method: get
+          path: resource
+          method: any
           cors: true
           authorizer: aws_iam
       - http:
-          path: legislator/{action}
-          method: get
+          path: resource/{action}
+          method: any
           cors: true
           authorizer: aws_iam
       - http:
-          path: legislator/{action}/{id}
-          method: get
+          path: resource/{action}/{id}
+          method: any
           cors: true
           authorizer: aws_iam
