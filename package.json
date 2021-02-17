@@ -1,6 +1,6 @@
 {
   "name": "mapapp-api",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "MapApp Serverless API",
   "author": "Chris Wade <genghishack@gmail.com>",
   "repository": "https://github.com/genghishack/mapapp-api.git",
