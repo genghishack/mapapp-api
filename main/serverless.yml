@@ -75,6 +75,25 @@ functions:
           method: any
           cors: true
           authorizer: aws_iam
+  user:
+    handler: user.router
+    description: Endpoints for accessing user data
+    events:
+      - http:
+          path: user
+          method: any
+          cors: true
+          authorizer: aws_iam
+      - http:
+          path: user/{action}
+          method: any
+          cors: true
+          authorizer: aws_iam
+      - http:
+          path: user/{action}/{id}
+          method: any
+          cors: true
+          authorizer: aws_iam
   resource:
     handler: resource.router
     description: Endpoints for accessing resource data
