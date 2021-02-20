@@ -1,5 +1,5 @@
-import { buildResponse, success, failure } from '../../lib/response-lib';
-import {logDebug} from "../../lib/logging-lib";
+import { buildResponse, success, failure } from '../../../lib/response-lib';
+import {logDebug} from "../../../lib/logging-lib";
 
 async function getUser(user, id) {
   // uses id

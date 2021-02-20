@@ -55,7 +55,7 @@ provider:
 
 functions:
   resource:
-    handler: resource.router
+    handler: resource/router.main
     description: Public endpoints for accessing resource data
     events:
       - http:

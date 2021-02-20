@@ -1,6 +1,6 @@
-import {pgQuery, pgCleanString} from '../postgres-lib';
-import { geocode } from '../gis-lib';
-import {logDebug} from "../logging-lib";
+import {pgQuery, pgCleanString} from '../lib/postgres-lib';
+import { geocode } from '../lib/gis-lib';
+import {logDebug} from "../lib/logging-lib";
 
 const resourceTable = 'gis_resource';
 

@@ -57,7 +57,7 @@ provider:
 
 functions:
   foo:
-    handler: foo.router
+    handler: foo/router.main
     description: No-op template for API endpoints
     events:
       - http:
@@ -76,7 +76,7 @@ functions:
           cors: true
           authorizer: aws_iam
   user:
-    handler: user.router
+    handler: user/router.main
     description: Endpoints for accessing user data
     events:
       - http:
@@ -95,7 +95,7 @@ functions:
           cors: true
           authorizer: aws_iam
   resource:
-    handler: resource.router
+    handler: resource/router.main
     description: Endpoints for accessing resource data
     events:
       - http:

@@ -1,6 +1,6 @@
-import { buildResponse, success, failure } from '../../lib/response-lib';
-import * as resourceLib from '../../lib/queries/resource-lib';
-import {logDebug, logError} from "../../lib/logging-lib";
+import { buildResponse, success, failure } from '../../../lib/response-lib';
+import * as resourceLib from '../../../queries/resource-lib';
+import {logDebug, logError} from "../../../lib/logging-lib";
 
 async function createResource(user, id, data) {
   if (user.type !== 'iam' && user.role !== 'User') {
