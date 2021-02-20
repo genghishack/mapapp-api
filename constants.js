@@ -5,4 +5,12 @@ export default {
     state: /^[A-Za-z]{2}$/, // e.g. NM
     date: /^\d{4}(\-(0?[1-9]|1[012]))?(\-(0?[1-9]|[12][0-9]|3[01]))?$/, //yyyy-mm-dd, yyyy-mm, yyyy
   },
+  tables: {
+    resource: {
+      main: 'gis_resource'
+    },
+    user: {
+      main: 'user'
+    }
+  }
 };

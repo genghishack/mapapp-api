@@ -1,5 +1,5 @@
 import { buildResponse, success, failure } from '../../../lib/response-lib';
-import * as resourceLib from '../../../queries/resource-lib';
+import * as resourceLib from '../../../queries/resource-queries';
 import {logDebug, logError} from "../../../lib/logging-lib";
 
 async function createResource(user, id, data) {

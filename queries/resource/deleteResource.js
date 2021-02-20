@@ -3,19 +3,18 @@ import constants from "../../constants";
 
 const resourceTables = constants.tables.resource;
 
-const getResources = async () => {
-  const label = 'list resources';
+const deleteResource = async (id) => {
+  const label = 'delete resource';
   const sql = `
-    SELECT id, name, address_json, latlng
-    FROM ${resourceTables.main}
+    SELECT 'no-op';
   `;
 
   try {
-    const result = await pgQuery(sql, [], label);
+    const result = await pgQuery(sql, [id], label);
     return result;
   } catch (e) {
     return Promise.reject(e);
   }
 };
 
-export default getResources;
+export default deleteResource;
