@@ -18,7 +18,7 @@ async function createResource(user, id, data) {
 
 async function listResources(user) {
   const message = 'list of resources';
-  console.log(message);
+  logDebug(message);
   const response = success({ data: message });
   return response;
 }

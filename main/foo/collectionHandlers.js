@@ -1,9 +1,10 @@
 import { buildResponse, success, failure } from '../../lib/response-lib';
+import {logDebug} from "../../lib/logging-lib";
 
 async function createFoo(user, id, data) {
   // uses data
   const message = 'newly created foo';
-  console.log(message);
+  logDebug(message);
   const response = success({ data: message });
   return response;
 }

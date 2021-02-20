@@ -1,9 +1,10 @@
 import { buildResponse, success, failure } from '../../lib/response-lib';
+import {logDebug} from "../../lib/logging-lib";
 
 async function getResource(user, id) {
   // uses id
   const message = 'single resource';
-  console.log(message);
+  logDebug(message);
   const response = success({ data: message });
   return response;
 }
@@ -11,7 +12,7 @@ async function getResource(user, id) {
 async function deleteResource(user, id) {
   // uses id
   const message = 'deleted resource';
-  console.log(message);
+  logDebug(message);
   const response = success({ data: message });
   return response;
 }
@@ -19,7 +20,7 @@ async function deleteResource(user, id) {
 async function patchResource(user, id, data) {
   // uses id, data
   const message = 'patched resource';
-  console.log(message);
+  logDebug(message);
   const response = success({ data: message });
   return response;
 }
@@ -27,7 +28,7 @@ async function patchResource(user, id, data) {
 async function editResource(user, id, data) {
   // uses user, id
   const message = 'edited resource';
-  console.log(message);
+  logDebug(message);
   const response = success({ data: message });
   return response;
 }
