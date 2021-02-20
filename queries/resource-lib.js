@@ -1,38 +1,11 @@
 import {pgQuery, pgCleanString} from '../lib/postgres-lib';
 import { geocode } from '../lib/gis-lib';
-import {logDebug} from "../lib/logging-lib";
+import getResource from "./resource/getResource";
+import getResources from "./resource/getResources";
 
 const resourceTable = 'gis_resource';
 
-export const getResource = async (id) => {
-  const label = 'get resource by id';
-  const sql = `
-    SELECT id, name, address_json, latlng
-    FROM ${resourceTable}
-    WHERE id = $1
-  `;
-
-  try {
-    return await pgQuery(sql, [id], label);
-  } catch (e) {
-    return Promise.reject(e);
-  }
-};
-
-export const getResources = async () => {
-  const label = 'list resources';
-  const sql = `
-    SELECT id, name, address_json, latlng
-    FROM gis_resource
-  `;
-
-  try {
-    const result = await pgQuery(sql, [], label);
-    return result;
-  } catch (e) {
-    return Promise.reject(e);
-  }
-};
+export { getResource, getResources };
 
 export const deleteResource = async (id) => {
   const label = 'delete resource';
