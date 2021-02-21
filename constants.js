@@ -11,7 +11,7 @@ export default {
       main: 'gis_resource'
     },
     user: {
-      main: 'user'
+      main: 'app_user'
     }
   }
 };

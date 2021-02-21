@@ -1,14 +1,16 @@
 import { buildResponse, success, failure } from '../../../lib/response-lib';
-import * as resourceLib from '../../../queries/resource-queries';
 import {logDebug, logError} from "../../../lib/logging-lib";
+import { isAdmin } from '../../../lib/user-lib';
+import * as resourceQuery from '../../../queries/resource-queries';
 
 async function createResource(user, id, data) {
-  if (user.type !== 'iam' && user.role !== 'User') {
-    return failure({message: 'No access'})
+  if (!isAdmin(user)) {
+    return failure({message: 'No access'});
   }
+
   let resource = {};
   try {
-    resource = await resourceLib.createResource(user, data)
+    resource = await resourceQuery.createResource(user, data)
     return success({data: resource, count: 1});
   } catch (e) {
     logError(e)
