@@ -13,7 +13,7 @@ const createUserOnSignup = async (user) => {
     JSON.stringify(user.roles),
   ];
 
-  logDebug({params});
+  // logDebug({params});
 
   const sql = `
     INSERT INTO ${userTables.main}

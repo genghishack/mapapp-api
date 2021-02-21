@@ -1,5 +1,5 @@
 import { buildResponse, success, failure } from '../../../lib/response-lib';
-import {logDebug} from "../../../lib/logging-lib";
+import {logDebug, logError} from "../../../lib/logging-lib";
 import {isAdmin, isUser, getClientUserModel} from "../../../lib/user-lib";
 import * as userQuery from '../../../queries/user-queries';
 
@@ -8,8 +8,8 @@ async function createUser(user, id, data) {
     return failure({message: 'No access'});
   }
 
+  let response = {};
   try {
-    let response = {};
     if (isAdmin(user)) {
       // TODO: Do something only admins can do - like create another user
     } else if (isUser(user)) {
@@ -19,6 +19,7 @@ async function createUser(user, id, data) {
     }
     return success({data: response, count: 1});
   } catch (e) {
+    logError(e);
     return failure({message: e.message});
   }
 }

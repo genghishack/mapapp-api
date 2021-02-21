@@ -5,10 +5,11 @@ const userTables = constants.tables.user;
 
 const getUser = async (id) => {
   const label = 'get user by id';
-  let params = []
+  let params = [id]
 
   const sql = `
-    SELECT 'no-op';
+    SELECT * from ${userTables.main}
+    WHERE id = $1;
   `;
 
   try {
