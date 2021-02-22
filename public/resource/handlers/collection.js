@@ -1,6 +1,6 @@
-import { buildResponse, success, failure } from '../../lib/response-lib';
-import * as resourceLib from "../../lib/queries/resource-lib";
-import {logError} from "../../lib/logging-lib";
+import { buildResponse, success, failure } from '../../../lib/response-lib';
+import * as resourceLib from "../../../queries/resource-queries";
+import {logError} from "../../../lib/logging-lib";
 
 // open to anonymous users
 async function listResources(user, id, data, params) {

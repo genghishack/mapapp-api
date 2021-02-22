@@ -1,9 +1,10 @@
-import { buildResponse, success, failure } from '../../lib/response-lib';
+import { buildResponse, success, failure } from '../../../lib/response-lib';
+import {logDebug} from "../../../lib/logging-lib";
 
 async function getFoo(user, id) {
   // uses id
   const message = 'single foo';
-  console.log(message);
+  logDebug(message);
   const response = success({ data: message });
   return response;
 }
@@ -11,23 +12,23 @@ async function getFoo(user, id) {
 async function deleteFoo(user, id) {
   // uses id
   const message = 'deleted foo';
-  console.log(message);
-  const response = success({ data: message });
-  return response;
-}
-
-async function patchFoo(user, id, data) {
-  // uses id, data
-  const message = 'patched foo';
-  console.log(message);
+  logDebug(message);
   const response = success({ data: message });
   return response;
 }
 
 async function editFoo(user, id, data) {
-  // uses user, id
+  // uses id, data
   const message = 'edited foo';
-  console.log(message);
+  logDebug(message);
+  const response = success({ data: message });
+  return response;
+}
+
+async function replaceFoo(user, id, data) {
+  // uses user, id
+  const message = 'replaced foo';
+  logDebug(message);
   const response = success({ data: message });
   return response;
 }
@@ -35,8 +36,8 @@ async function editFoo(user, id, data) {
 const itemHandlers = {
   DELETE: deleteFoo,
   GET: getFoo,
-  PATCH: patchFoo,
-  PUT: editFoo,
+  PATCH: editFoo,
+  PUT: replaceFoo,
 };
 
 export default itemHandlers;
