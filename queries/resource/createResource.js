@@ -11,7 +11,6 @@ const createResource = async (user, data) => {
   const label = 'create resource';
 
   const {address} = data;
-  const addressString = pgCleanString(JSON.stringify(address));
   const addressArray = [];
   [
     address.street_1,
@@ -30,14 +29,26 @@ const createResource = async (user, data) => {
   const name = data.name
     ? pgCleanString(data.name)
     : pgCleanString(addressFormatted);
-  const params = [name, addressString]
+  const params = [
+    user.userParams.Username,
+    name,
+    pgCleanString(JSON.stringify(address))
+  ]
   const location = await geocode(address);
   // logDebug({location})
   const {latLng: {lat, lng}} = location;
 
   const sql = `
-    INSERT INTO ${resourceTables.main} (name, address_json, latlng)
-    VALUES ($1, $2, ARRAY[${lat}, ${lng}])
+    INSERT INTO ${resourceTables.main} (
+      name, 
+      address_json, 
+      latlng,
+      created_at,
+      created_by,
+      updated_at,
+      updated_by
+    )
+    VALUES ($2, $3, ARRAY[${lat}, ${lng}], NOW(), $1, NOW(), $1)
     RETURNING *
   `;
 

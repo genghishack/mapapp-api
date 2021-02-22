@@ -1,11 +1,11 @@
-import { buildResponse, success, failure } from '../../../lib/response-lib';
+import {buildResponse, success, failure, noAccess} from '../../../lib/response-lib';
 import {logDebug, logError} from "../../../lib/logging-lib";
 import {isAdmin, isUser, getClientUserModel} from "../../../lib/user-lib";
 import * as userQuery from '../../../queries/user-queries';
 
 async function getOwnUser(user) {
   if (!isUser(user)) {
-    return failure({message: 'No access'});
+    return noAccess();
   }
 
   let response = {};

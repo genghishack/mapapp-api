@@ -1,11 +1,11 @@
-import { buildResponse, success, failure } from '../../../lib/response-lib';
+import {buildResponse, success, failure, noAccess} from '../../../lib/response-lib';
 import {logDebug, logError} from "../../../lib/logging-lib";
 import { isAdmin } from '../../../lib/user-lib';
 import * as resourceQuery from '../../../queries/resource-queries';
 
 async function createResource(user, id, data) {
   if (!isAdmin(user)) {
-    return failure({message: 'No access'});
+    return noAccess();
   }
 
   let resource = {};
