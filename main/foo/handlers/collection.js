@@ -1,5 +1,5 @@
-import { buildResponse, success, failure } from '../../lib/response-lib';
-import {logDebug} from "../../lib/logging-lib";
+import { buildResponse, success, failure } from '../../../lib/response-lib';
+import {logDebug} from "../../../lib/logging-lib";
 
 async function createFoo(user, id, data) {
   // uses data
@@ -11,7 +11,7 @@ async function createFoo(user, id, data) {
 
 async function listFoo(user) {
   const message = 'list of foo';
-  console.log(message);
+  logDebug(message);
   const response = success({ data: message });
   return response;
 }

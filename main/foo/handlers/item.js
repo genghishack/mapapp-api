@@ -1,5 +1,5 @@
-import { buildResponse, success, failure } from '../../lib/response-lib';
-import {logDebug} from "../../lib/logging-lib";
+import { buildResponse, success, failure } from '../../../lib/response-lib';
+import {logDebug} from "../../../lib/logging-lib";
 
 async function getFoo(user, id) {
   // uses id
@@ -17,17 +17,17 @@ async function deleteFoo(user, id) {
   return response;
 }
 
-async function patchFoo(user, id, data) {
+async function editFoo(user, id, data) {
   // uses id, data
-  const message = 'patched foo';
+  const message = 'edited foo';
   logDebug(message);
   const response = success({ data: message });
   return response;
 }
 
-async function editFoo(user, id, data) {
+async function replaceFoo(user, id, data) {
   // uses user, id
-  const message = 'edited foo';
+  const message = 'replaced foo';
   logDebug(message);
   const response = success({ data: message });
   return response;
@@ -36,8 +36,8 @@ async function editFoo(user, id, data) {
 const itemHandlers = {
   DELETE: deleteFoo,
   GET: getFoo,
-  PATCH: patchFoo,
-  PUT: editFoo,
+  PATCH: editFoo,
+  PUT: replaceFoo,
 };
 
 export default itemHandlers;

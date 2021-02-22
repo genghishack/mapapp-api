@@ -1,5 +1,5 @@
-import actionHandlers from "./actionHandlers";
-import collectionHandlers from "./collectionHandlers";
-import itemHandlers from "./itemHandlers";
+import actionHandlers from "./handlers/action";
+import collectionHandlers from "./handlers/collection";
+import itemHandlers from "./handlers/item";
 
 export default {actionHandlers, collectionHandlers, itemHandlers};
