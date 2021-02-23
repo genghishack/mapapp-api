@@ -15,13 +15,15 @@ const updateUser = async (user, id, data) => {
     params = [
       user.userParams.Username,
       pgCleanString(user.email),
+      pgCleanString(user.name),
       JSON.stringify(user.roles),
     ]
     sql = `
       UPDATE ${userTables.main}
       SET
         email = $2,
-        roles = $3,
+        name = $3,
+        roles = $4,
         updated_at = NOW(),
         updated_by = $1
       WHERE id = $1
