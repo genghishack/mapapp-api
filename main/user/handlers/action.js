@@ -12,11 +12,16 @@ async function getOwnUser(user) {
   const { userParams: { Username: userId } } = user;
   try {
     let [userRecord] = await userQuery.getUser(userId);
-    if (userRecord.roles !== user.roles
-      || userRecord.email !== user.email
-      || userRecord.name !== user.name
-    ) {
-      [userRecord] = await userQuery.updateUser(user);
+    console.log({userRecord});
+    if (!userRecord) {
+      [userRecord] = await userQuery.createUserOnSignup(user);
+    } else {
+      if (userRecord.roles !== user.roles
+        || userRecord.email !== user.email
+        || userRecord.name !== user.name
+      ) {
+        [userRecord] = await userQuery.updateUser(user);
+      }
     }
     response = getClientUserModel(userRecord);
     return success({data: response, count: 1});
