@@ -12,7 +12,6 @@ async function getOwnUser(user) {
   const { userParams: { Username: userId } } = user;
   try {
     let [userRecord] = await userQuery.getUser(userId);
-    console.log({userRecord});
     if (!userRecord) {
       [userRecord] = await userQuery.createUserOnSignup(user);
     } else {
