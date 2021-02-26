@@ -1,35 +1,50 @@
-import { buildResponse, success, failure } from '../../../lib/response-lib';
-import {logDebug} from "../../../lib/logging-lib";
+import {success, failure, noAccess} from '../../../lib/response-lib';
+import {logDebug, logError} from "../../../lib/logging-lib";
+import {isAdmin} from "../../../lib/user-lib";
+import * as resourceLib from '../../../queries/resource-queries';
 
 async function getResource(user, id) {
-  // uses id
-  const message = 'single resource';
-  logDebug(message);
-  const response = success({ data: message });
-  return response;
+  let resource = {};
+  try {
+    resource = await resourceLib.getResource(id);
+    // logDebug({resource});
+    return success({data: resource, count: 1});
+  } catch (e) {
+    logError(e);
+    return failure({message: e.message});
+  }
 }
 
 async function deleteResource(user, id) {
+  if (!isAdmin(user)) {
+    return noAccess();
+  }
   // uses id
   const message = 'deleted resource';
   logDebug(message);
-  const response = success({ data: message });
+  const response = success({data: message});
   return response;
 }
 
 async function editResource(user, id, data) {
+  if (!isAdmin(user)) {
+    return noAccess();
+  }
   // uses id, data
   const message = 'edited resource';
   logDebug(message);
-  const response = success({ data: message });
+  const response = success({data: message});
   return response;
 }
 
 async function replaceResource(user, id, data) {
+  if (!isAdmin(user)) {
+    return noAccess();
+  }
   // uses user, id
   const message = 'replaced resource';
   logDebug(message);
-  const response = success({ data: message });
+  const response = success({data: message});
   return response;
 }
 
