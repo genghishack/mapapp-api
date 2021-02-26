@@ -1,4 +1,4 @@
-import { buildResponse, success, failure } from '../../../lib/response-lib';
+import {success, failure} from '../../../lib/response-lib';
 import * as resourceLib from "../../../queries/resource-queries";
 import {logError} from "../../../lib/logging-lib";
 
@@ -6,7 +6,7 @@ import {logError} from "../../../lib/logging-lib";
 async function listResources(user, id, data, params) {
   let date = null;
   if (params && params.date) {
-    ({ date } = params);
+    ({date} = params);
   }
 
   let resources = [];

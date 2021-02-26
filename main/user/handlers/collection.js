@@ -1,10 +1,10 @@
-import {buildResponse, success, failure, noAccess} from '../../../lib/response-lib';
+import {success, failure, noAccess} from '../../../lib/response-lib';
 import {logDebug, logError} from "../../../lib/logging-lib";
-import {isAdmin, isUser, getClientUserModel} from "../../../lib/user-lib";
+import {isAdmin, getClientUserModel, isGuest} from "../../../lib/user-lib";
 import * as userQuery from '../../../queries/user-queries';
 
 async function createUser(user, id, data) {
-  if (!isAdmin(user) && !isUser(user)) {
+  if (isGuest(user)) {
     return noAccess();
   }
 
@@ -27,7 +27,7 @@ async function createUser(user, id, data) {
 async function listUsers(user) {
   const message = 'list of users';
   logDebug(message);
-  const response = success({ data: message });
+  const response = success({data: message});
   return response;
 }
 

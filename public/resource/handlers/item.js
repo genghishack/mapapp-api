@@ -1,5 +1,5 @@
-import {buildResponse, success, failure} from '../../../lib/response-lib';
-import {logDebug, logError} from '../../../lib/logging-lib';
+import {success, failure} from '../../../lib/response-lib';
+import {logError} from '../../../lib/logging-lib';
 import * as resourceLib from '../../../queries/resource-queries';
 
 // open to anonymous users

@@ -1,15 +1,15 @@
-import {buildResponse, success, failure, noAccess} from '../../../lib/response-lib';
-import {logDebug, logError} from "../../../lib/logging-lib";
-import {isAdmin, isUser, getClientUserModel} from "../../../lib/user-lib";
+import {success, failure, noAccess} from '../../../lib/response-lib';
+import {logError} from "../../../lib/logging-lib";
+import {getClientUserModel, isGuest} from "../../../lib/user-lib";
 import * as userQuery from '../../../queries/user-queries';
 
 async function getOwnUser(user) {
-  if (!isUser(user)) {
+  if (isGuest(user)) {
     return noAccess();
   }
 
   let response = {};
-  const { userParams: { Username: userId } } = user;
+  const {userParams: {Username: userId}} = user;
   try {
     let [userRecord] = await userQuery.getUser(userId);
     if (!userRecord) {

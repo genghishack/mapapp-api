@@ -62,11 +62,14 @@ functions:
           path: public/resource
           method: get
           cors: true
+          authorizer: aws_iam
       - http:
           path: public/resource/{action}
           method: get
           cors: true
+          authorizer: aws_iam
       - http:
           path: public/resource/{action}/{id}
           method: get
           cors: true
+          authorizer: aws_iam

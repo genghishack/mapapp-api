@@ -4,5 +4,4 @@ import ResourceHandlers from './handlers';
 export const main = LambdaRouter({
   handlers: ResourceHandlers,
   idType: 'uuid',
-  isPublic: true
 });
