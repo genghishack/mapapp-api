@@ -1,6 +1,5 @@
 import {pgCleanString, pgQuery} from "../../lib/postgres-lib";
 import constants from "../../constants";
-import {logDebug} from "../../lib/logging-lib";
 
 const userTables = constants.tables.user;
 
@@ -13,8 +12,6 @@ const createUserOnSignup = async (user) => {
     pgCleanString(user.name),
     JSON.stringify(user.roles),
   ];
-
-  // logDebug({params});
 
   const sql = `
     INSERT INTO ${userTables.main}
