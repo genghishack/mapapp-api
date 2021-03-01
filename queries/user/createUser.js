@@ -1,4 +1,4 @@
-import {pgCleanString, pgQuery} from "../../lib/postgres-lib";
+import {pgQuery} from "../../lib/postgres-lib";
 import constants from "../../constants";
 
 const userTables = constants.tables.user;
