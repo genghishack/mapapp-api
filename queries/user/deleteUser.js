@@ -5,10 +5,12 @@ const userTables = constants.tables.user;
 
 const deleteUser = async (id) => {
   const label = 'delete user';
-  let params = []
+  let params = [id]
 
   const sql = `
-    SELECT 'no-op';
+    DELETE FROM ${userTables.main}
+    WHERE id = $1
+    RETURNING *;
   `;
 
   try {
