@@ -46,6 +46,8 @@ provider:
         - cognito-idp:AdminListGroupsForUser
         - cognito-idp:AdminAddUserToGroup
         - cognito-idp:AdminDeleteUser
+        - cognito-idp:AdminDisableUser
+        - cognito-idp:AdminEnableUser
         - cognito-idp:AdminGetUser
         - cognito-idp:ListUsers
       Resource:
