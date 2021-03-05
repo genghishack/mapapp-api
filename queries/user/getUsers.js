@@ -3,12 +3,21 @@ import constants from "../../constants";
 
 const userTables = constants.tables.user;
 
-const getUsers = async () => {
+const getUsers = async (userIds = []) => {
   const label = 'list users';
-  let params = []
+  const params = userIds;
+
+  let whereClause = '';
+  if (userIds.length) {
+    const whereArr = params.map((value, index) => {
+      return `$${index + 1}`;
+    });
+    whereClause = `WHERE id IN (${whereArr.join(',')})`;
+  }
 
   const sql = `
-    SELECT 'no-op';
+    SELECT * from ${userTables.main}
+    ${whereClause};
   `;
 
   try {

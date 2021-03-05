@@ -17,7 +17,7 @@ const createUserOnSignup = async (user) => {
     INSERT INTO ${userTables.main}
     (
       id, 
-      federatedId, 
+      federated_id, 
       email,
       name,
       roles,
