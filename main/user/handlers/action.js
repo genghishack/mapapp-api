@@ -2,7 +2,7 @@ import {success, failure, noAccess} from '../../../lib/response-lib';
 import {logError, logDebug} from "../../../lib/logging-lib";
 import {getClientUserModel, isGuest, isAdmin} from "../../../lib/user-lib";
 import * as userQuery from '../../../queries/user-queries';
-import {enableCognitoUser, disableCognitoUser, getCognitoUser, getAdminUserModel} from "../../../lib/admin-lib";
+import {enableCognitoUser, disableCognitoUser, getAdminUserModel, listCognitoRoles} from "../../../lib/admin-lib";
 
 const getOwnUser = async (user) => {
   if (isGuest(user)) return noAccess();
@@ -65,9 +65,23 @@ const disableUser = async (user, id) => {
   }
 }
 
+const listRoles = async (user) => {
+  if (!isAdmin(user)) return noAccess();
+
+  const {userParams: {UserPoolId}} = user;
+  try {
+    const roles = await listCognitoRoles(UserPoolId);
+    return success({data: roles, count: roles.length});
+  } catch (e) {
+    logError(e);
+    return failure({message: e.message});
+  }
+}
+
 const actionHandlers = {
   GET: {
     self: getOwnUser,
+    roles: listRoles,
   },
   PATCH: {
     enable: enableUser,
