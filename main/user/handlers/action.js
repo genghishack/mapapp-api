@@ -2,7 +2,11 @@ import {success, failure, noAccess} from '../../../lib/response-lib';
 import {logError, logDebug} from "../../../lib/logging-lib";
 import {getClientUserModel, isGuest, isAdmin} from "../../../lib/user-lib";
 import * as userQuery from '../../../queries/user-queries';
-import {enableCognitoUser, disableCognitoUser, getAdminUserModel, listCognitoRoles} from "../../../lib/admin-lib";
+import {
+  enableCognitoUser, disableCognitoUser,
+  getAdminUserModel, listCognitoGroups,
+  assignUserToRole, removeUserFromRole,
+} from "../../../lib/admin-lib";
 
 const getOwnUser = async (user) => {
   if (isGuest(user)) return noAccess();
@@ -70,8 +74,49 @@ const listRoles = async (user) => {
 
   const {userParams: {UserPoolId}} = user;
   try {
-    const roles = await listCognitoRoles(UserPoolId);
+    const groups = await listCognitoGroups(UserPoolId);
+    const roles = groups.map(group => {
+      return group.GroupName;
+    })
     return success({data: roles, count: roles.length});
+  } catch (e) {
+    logError(e);
+    return failure({message: e.message});
+  }
+}
+
+const addUserRole = async (user, id, data) => {
+  if (!isAdmin(user)) return noAccess();
+
+  const {role} = data;
+  const {userParams: {UserPoolId}} = user;
+  const userParams = {
+    Username: id,
+    UserPoolId,
+  }
+  try {
+    await assignUserToRole(userParams, role);
+    const updatedUser = await getAdminUserModel(userParams);
+    return success({data: updatedUser, count: 1});
+  } catch (e) {
+    logError(e);
+    return failure({message: e.message});
+  }
+}
+
+const removeUserRole = async (user, id, data) => {
+  if (!isAdmin(user)) return noAccess();
+
+  const {role} = data;
+  const {userParams: {UserPoolId}} = user;
+  const userParams = {
+    Username: id,
+    UserPoolId,
+  }
+  try {
+    await removeUserFromRole(userParams, role);
+    const updatedUser = await getAdminUserModel(userParams);
+    return success({data: updatedUser, count: 1});
   } catch (e) {
     logError(e);
     return failure({message: e.message});
@@ -86,7 +131,11 @@ const actionHandlers = {
   PATCH: {
     enable: enableUser,
     disable: disableUser,
-  }
+  },
+  PUT: {
+    add_role: addUserRole,
+    remove_role: removeUserRole,
+  },
 };
 
 export default actionHandlers;
