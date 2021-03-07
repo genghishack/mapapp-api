@@ -133,8 +133,10 @@ const actionHandlers = {
     disable: disableUser,
   },
   PUT: {
-    add_role: addUserRole,
-    remove_role: removeUserRole,
+    role: addUserRole,
+  },
+  DELETE: {
+    role: removeUserRole,
   },
 };
 
