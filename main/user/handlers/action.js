@@ -3,9 +3,9 @@ import {logError, logDebug} from "../../../lib/logging-lib";
 import {getClientUserModel, isGuest, isAdmin} from "../../../lib/user-lib";
 import * as userQuery from '../../../queries/user-queries';
 import {
-  enableCognitoUser, disableCognitoUser,
-  getAdminUserModel, listCognitoGroups,
-  assignUserToRole, removeUserFromRole,
+  enableCognitoUser, disableCognitoUser, getAdminUserModel,
+  listCognitoGroups, assignUserToRole, removeUserFromRole,
+  updateUserAttribute,
 } from "../../../lib/admin-lib";
 
 const getOwnUser = async (user) => {
@@ -123,6 +123,26 @@ const removeUserRole = async (user, id, data) => {
   }
 }
 
+const changeUserName = async (user, id, data) => {
+  if (!isAdmin(user)) return noAccess;
+
+  const userParams = {
+    Username: id,
+    UserPoolId: user.userParams.UserPoolId,
+  }
+  try {
+    await updateUserAttribute(userParams, {
+      Name: 'name',
+      Value: data.name,
+    });
+    const updatedUser = await getAdminUserModel(userParams);
+    return success({data: updatedUser, count: 1});
+  } catch (e) {
+    logError(e);
+    return failure({message: e.message});
+  }
+}
+
 const actionHandlers = {
   GET: {
     self: getOwnUser,
@@ -131,6 +151,7 @@ const actionHandlers = {
   PATCH: {
     enable: enableUser,
     disable: disableUser,
+    name: changeUserName,
   },
   PUT: {
     role: addUserRole,
