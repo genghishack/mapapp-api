@@ -2,11 +2,11 @@ import {success, failure, noAccess} from '../../../lib/response-lib';
 import {logError, logDebug} from "../../../lib/logging-lib";
 import {getClientUserModel, isGuest, isAdmin} from "../../../lib/user-lib";
 import * as userQuery from '../../../queries/user-queries';
+import {getAdminUserModel} from "../../../lib/admin-lib";
 import {
-  enableCognitoUser, disableCognitoUser, getAdminUserModel,
-  listCognitoGroups, assignUserToRole, removeUserFromRole,
-  updateUserAttribute,
-} from "../../../lib/admin-lib";
+  assignUserToRole, disableCognitoUser, enableCognitoUser,
+  listCognitoGroups, removeUserFromRole, updateUserAttribute
+} from "../../../lib/cognito-lib";
 
 const getOwnUser = async (user) => {
   if (isGuest(user)) return noAccess();
@@ -28,8 +28,7 @@ const getOwnUser = async (user) => {
     response = getClientUserModel(userRecord);
     return success({data: response, count: 1});
   } catch (e) {
-    logError(e);
-    return failure({message: e.message});
+    return failure(e);
   }
 }
 
@@ -46,8 +45,7 @@ const enableUser = async (user, id) => {
     const userModel = await getAdminUserModel(user, userParams);
     return success({data: userModel, count: 1});
   } catch (e) {
-    logError(e);
-    return failure({message: e.message});
+    return failure(e);
   }
 }
 
@@ -64,8 +62,7 @@ const disableUser = async (user, id) => {
     const userModel = await getAdminUserModel(user, userParams);
     return success({data: userModel, count: 1});
   } catch (e) {
-    logError(e);
-    return failure({message: e.message});
+    return failure(e);
   }
 }
 
@@ -80,8 +77,7 @@ const listRoles = async (user) => {
     })
     return success({data: roles, count: roles.length});
   } catch (e) {
-    logError(e);
-    return failure({message: e.message});
+    return failure(e);
   }
 }
 
@@ -99,8 +95,7 @@ const addUserRole = async (user, id, data) => {
     const updatedUser = await getAdminUserModel(user, userParams);
     return success({data: updatedUser, count: 1});
   } catch (e) {
-    logError(e);
-    return failure({message: e.message});
+    return failure(e);
   }
 }
 
@@ -118,8 +113,7 @@ const removeUserRole = async (user, id, data) => {
     const updatedUser = await getAdminUserModel(user, userParams);
     return success({data: updatedUser, count: 1});
   } catch (e) {
-    logError(e);
-    return failure({message: e.message});
+    return failure(e);
   }
 }
 
@@ -138,8 +132,7 @@ const changeUserName = async (user, id, data) => {
     const updatedUser = await getAdminUserModel(user, userParams);
     return success({data: updatedUser, count: 1});
   } catch (e) {
-    logError(e);
-    return failure({message: e.message});
+    return failure(e);
   }
 }
 

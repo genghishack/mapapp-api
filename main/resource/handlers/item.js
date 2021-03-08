@@ -10,8 +10,7 @@ async function getResource(user, id) {
     // logDebug({resource});
     return success({data: resource, count: 1});
   } catch (e) {
-    logError(e);
-    return failure({message: e.message});
+    return failure(e);
   }
 }
 
