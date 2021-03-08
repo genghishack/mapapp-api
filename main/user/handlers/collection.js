@@ -2,22 +2,27 @@ import {success, failure, noAccess} from '../../../lib/response-lib';
 import {logDebug, logError} from "../../../lib/logging-lib";
 import {isAdmin, isGuest, getClientUserModel} from "../../../lib/user-lib";
 import {getAdminUserModel} from "../../../lib/admin-lib";
-import {listCognitoUsers} from "../../../lib/cognito-lib";
+import {createCognitoUser, listCognitoUsers} from "../../../lib/cognito-lib";
 import * as userQuery from '../../../queries/user-queries';
 
 const createUser = async (user, id, data) => {
   if (isGuest(user)) return noAccess();
 
-  let response = {};
+  let newUser = {};
   try {
-    if (isAdmin(user)) {
-      // TODO: Do something only admins can do - like create another user
+    if (isAdmin(user) && data.email) {
+      const newUserParams = {
+        DesiredDeliveryMediums: ['EMAIL'],
+        Username: data.email,
+        UserPoolId: user.userParams.UserPoolId,
+      }
+      newUser = await createCognitoUser(newUserParams);
     } else {
-      // Regular users can only create their own record from the event data
+      // Regular users can only create their own db record from the event data
       const [newUserRecord] = await userQuery.createUserOnSignup(user);
-      response = getClientUserModel(newUserRecord);
+      newUser = getClientUserModel(newUserRecord);
     }
-    return success({data: response, count: 1});
+    return success({data: newUser, count: 1});
   } catch (e) {
     return failure(e);
   }
