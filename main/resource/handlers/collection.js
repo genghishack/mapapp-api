@@ -14,8 +14,7 @@ async function createResource(user, id, data) {
     resource = await resourceQuery.createResource(user, data)
     return success({data: resource, count: 1});
   } catch (e) {
-    logError(e);
-    return failure({message: e.message});
+    return failure(e);
   }
 }
 
@@ -31,8 +30,7 @@ async function listResources(user, id, data, params) {
     logDebug({resources});
     return success({data: resources, count: resources.length});
   } catch (e) {
-    logError(e);
-    return failure({message: e.message});
+    return failure(e);
   }
 }
 

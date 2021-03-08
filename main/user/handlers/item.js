@@ -1,45 +1,47 @@
-import {noAccess, success} from '../../../lib/response-lib';
-import {logDebug} from "../../../lib/logging-lib";
+import {failure, noAccess, success} from '../../../lib/response-lib';
+import {logDebug, logError} from "../../../lib/logging-lib";
 import {isAdmin} from "../../../lib/user-lib";
+import {deleteCognitoUser} from "../../../lib/cognito-lib";
+import * as userQuery from '../../../queries/user-queries';
 
-async function getUser(user, id) {
-  if (!isAdmin(user)) {
-    return noAccess();
-  }
-  // uses id
+const getUser = async (user, id) => {
+  if (!isAdmin(user)) return noAccess();
+
   const message = 'single user';
   logDebug(message);
   const response = success({data: message});
   return response;
 }
 
-async function deleteUser(user, id) {
-  if (!isAdmin(user)) {
-    return noAccess();
+const deleteUser = async (user, id) => {
+  if (!isAdmin(user)) return noAccess();
+
+  const {userParams: {UserPoolId}} = user;
+  const userParams = {
+    Username: id,
+    UserPoolId,
   }
-  // uses id
-  const message = 'deleted user';
-  logDebug(message);
-  const response = success({data: message});
-  return response;
+  try {
+    const deletedUser = await userQuery.deleteUser(id);
+    await deleteCognitoUser(userParams);
+    return success({data: deletedUser, count: 1});
+  } catch (e) {
+    return failure(e);
+  }
 }
 
-async function editUser(user, id, data) {
-  if (!isAdmin(user)) {
-    return noAccess();
-  }
-  // uses id, data
+const editUser = async (user, id, data) => {
+  if (!isAdmin(user)) return noAccess();
+
   const message = 'edited user';
   logDebug(message);
   const response = success({data: message});
   return response;
 }
 
-async function replaceUser(user, id, data) {
-  if (!isAdmin(user)) {
-    return noAccess();
-  }
-  // uses user, id
+const replaceUser = async (user, id, data) => {
+  if (!isAdmin(user)) return noAccess();
+
   const message = 'replaced user';
   logDebug(message);
   const response = success({data: message});
