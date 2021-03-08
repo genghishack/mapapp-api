@@ -1,4 +1,5 @@
 import {pgQuery} from "../../lib/postgres-lib";
+import {reject} from "../../lib/error-lib";
 import constants from "../../constants";
 
 const resourceTables = constants.tables.resource;
@@ -20,7 +21,7 @@ const updateResource = async (user, id, data) => {
   try {
     return await pgQuery(sql, params, label);
   } catch (e) {
-    return Promise.reject(e);
+    return reject(e);
   }
 };
 

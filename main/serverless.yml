@@ -45,8 +45,15 @@ provider:
       Action:
         - cognito-idp:AdminListGroupsForUser
         - cognito-idp:AdminAddUserToGroup
+        - cognito-idp:AdminRemoveUserFromGroup
+        - cognito-idp:AdminUpdateUserAttributes
+        - cognito-idp:AdminCreateUser
         - cognito-idp:AdminDeleteUser
+        - cognito-idp:AdminDisableUser
+        - cognito-idp:AdminEnableUser
         - cognito-idp:AdminGetUser
+        - cognito-idp:ListUsers
+        - cognito-idp:ListGroups
       Resource:
         'Fn::ImportValue': MapAppUserPool-arn
     - Effect: Allow
