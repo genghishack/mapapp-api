@@ -43,7 +43,7 @@ const listUsers = async (user) => {
         Username: cognitoUser.Username,
         UserPoolId,
       }
-      return getAdminUserModel(userParams, cognitoUser);
+      return getAdminUserModel(user, userParams, cognitoUser);
     }));
     return success({data: users, count: users.length});
   } catch (e) {

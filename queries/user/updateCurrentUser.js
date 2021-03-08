@@ -3,15 +3,15 @@ import constants from "../../constants";
 
 const userTables = constants.tables.user;
 
-const updateUser = async (adminUser, user) => {
-  const label = 'update user';
+const updateCurrentUser = async (user) => {
+  const label = 'update current user';
 
+  // Update the current user's main db record to match what's in cognito
   const params = [
-    user.id,
+    user.userParams.Username,
     pgCleanString(user.email),
     pgCleanString(user.name),
     JSON.stringify(user.roles),
-    adminUser.userParams.Username,
   ]
   const sql = `
     UPDATE ${userTables.main}
@@ -20,7 +20,7 @@ const updateUser = async (adminUser, user) => {
       name = $3,
       roles = $4,
       updated_at = NOW(),
-      updated_by = $5
+      updated_by = $1
     WHERE id = $1
     RETURNING *;
   `;
@@ -30,7 +30,6 @@ const updateUser = async (adminUser, user) => {
   } catch (e) {
     return Promise.reject(e);
   }
-}
+};
 
-
-export default updateUser;
+export default updateCurrentUser;

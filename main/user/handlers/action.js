@@ -22,7 +22,7 @@ const getOwnUser = async (user) => {
         || userRecord.email !== user.email
         || userRecord.name !== user.name
       ) {
-        [userRecord] = await userQuery.updateUser(user);
+        [userRecord] = await userQuery.updateCurrentUser(user);
       }
     }
     response = getClientUserModel(userRecord);
@@ -43,7 +43,7 @@ const enableUser = async (user, id) => {
 
   try {
     await enableCognitoUser(userParams);
-    const userModel = await getAdminUserModel(userParams);
+    const userModel = await getAdminUserModel(user, userParams);
     return success({data: userModel, count: 1});
   } catch (e) {
     logError(e);
@@ -61,7 +61,7 @@ const disableUser = async (user, id) => {
 
   try {
     await disableCognitoUser(userParams);
-    const userModel = await getAdminUserModel(userParams);
+    const userModel = await getAdminUserModel(user, userParams);
     return success({data: userModel, count: 1});
   } catch (e) {
     logError(e);
@@ -96,7 +96,7 @@ const addUserRole = async (user, id, data) => {
   }
   try {
     await assignUserToRole(userParams, role);
-    const updatedUser = await getAdminUserModel(userParams);
+    const updatedUser = await getAdminUserModel(user, userParams);
     return success({data: updatedUser, count: 1});
   } catch (e) {
     logError(e);
@@ -115,7 +115,7 @@ const removeUserRole = async (user, id, data) => {
   }
   try {
     await removeUserFromRole(userParams, role);
-    const updatedUser = await getAdminUserModel(userParams);
+    const updatedUser = await getAdminUserModel(user, userParams);
     return success({data: updatedUser, count: 1});
   } catch (e) {
     logError(e);
@@ -135,7 +135,7 @@ const changeUserName = async (user, id, data) => {
       Name: 'name',
       Value: data.name,
     });
-    const updatedUser = await getAdminUserModel(userParams);
+    const updatedUser = await getAdminUserModel(user, userParams);
     return success({data: updatedUser, count: 1});
   } catch (e) {
     logError(e);
