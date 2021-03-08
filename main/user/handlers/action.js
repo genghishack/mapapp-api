@@ -4,8 +4,8 @@ import {getClientUserModel, isGuest, isAdmin} from "../../../lib/user-lib";
 import * as userQuery from '../../../queries/user-queries';
 import {getAdminUserModel} from "../../../lib/admin-lib";
 import {
-  assignUserToRole, disableCognitoUser, enableCognitoUser,
-  listCognitoGroups, removeUserFromRole, updateUserAttribute
+  addCognitoUserToGroup, disableCognitoUser, enableCognitoUser,
+  listCognitoGroups, removeCognitoUserFromGroup, updateUserAttribute
 } from "../../../lib/cognito-lib";
 
 const getOwnUser = async (user) => {
@@ -91,7 +91,7 @@ const addUserRole = async (user, id, data) => {
     UserPoolId,
   }
   try {
-    await assignUserToRole(userParams, role);
+    await addCognitoUserToGroup(userParams, role);
     const updatedUser = await getAdminUserModel(user, userParams);
     return success({data: updatedUser, count: 1});
   } catch (e) {
@@ -109,7 +109,7 @@ const removeUserRole = async (user, id, data) => {
     UserPoolId,
   }
   try {
-    await removeUserFromRole(userParams, role);
+    await removeCognitoUserFromGroup(userParams, role);
     const updatedUser = await getAdminUserModel(user, userParams);
     return success({data: updatedUser, count: 1});
   } catch (e) {

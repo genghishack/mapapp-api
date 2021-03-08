@@ -1,12 +1,13 @@
 import {pgCleanString, pgQuery} from "../../lib/postgres-lib";
 import {geocode} from "../../lib/gis-lib";
+import {reject} from "../../lib/error-lib";
 import constants from "../../constants";
 
 const resourceTables = constants.tables.resource;
 
 const createResource = async (user, data) => {
   if (!data.address) {
-    return Promise.reject({message: 'No address provided'})
+    return reject(new Error('No address provided'))
   }
   const label = 'create resource';
 
@@ -55,7 +56,7 @@ const createResource = async (user, data) => {
   try {
     return await pgQuery(sql, params, label);
   } catch (e) {
-    return Promise.reject(e);
+    return reject(e);
   }
 };
 

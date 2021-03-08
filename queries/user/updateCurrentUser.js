@@ -1,4 +1,5 @@
 import {pgCleanString, pgQuery} from "../../lib/postgres-lib";
+import {reject} from "../../lib/error-lib";
 import constants from "../../constants";
 
 const userTables = constants.tables.user;
@@ -26,9 +27,9 @@ const updateCurrentUser = async (user) => {
   `;
 
   try {
-    return await pgQuery(sql, params, label);
+    return pgQuery(sql, params, label);
   } catch (e) {
-    return Promise.reject(e);
+    return reject(e);
   }
 };
 
