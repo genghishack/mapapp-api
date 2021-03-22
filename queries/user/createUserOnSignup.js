@@ -1,4 +1,4 @@
-import {pgCleanString, pgQuery} from "../../lib/postgres-lib";
+import {pgQuery} from "../../lib/postgres-lib";
 import {reject} from "../../lib/error-lib";
 import constants from "../../constants";
 
@@ -9,8 +9,8 @@ const createUserOnSignup = async (user) => {
   let params = [
     user.userParams.Username,
     user.userIdentity.federatedId,
-    pgCleanString(user.email),
-    pgCleanString(user.name),
+    user.email,
+    user.name,
     JSON.stringify(user.roles),
   ];
 
