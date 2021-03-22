@@ -7,7 +7,7 @@ const resourceTables = constants.tables.resource;
 const getResources = async () => {
   const label = 'list resources';
   const sql = `
-    SELECT id, name, address_json, latlng
+    SELECT id, name, description, address_json, latlng
     FROM ${resourceTables.main}
   `;
 
