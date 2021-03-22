@@ -1,4 +1,4 @@
-import {pgCleanString, pgQuery} from "../../lib/postgres-lib";
+import {pgQuery} from "../../lib/postgres-lib";
 import {geocode} from "../../lib/gis-lib";
 import {reject} from "../../lib/error-lib";
 import constants from "../../constants";
@@ -28,20 +28,25 @@ const createResource = async (user, data) => {
   const addressFormatted = addressArray.join(', ');
 
   const name = data.name
-    ? pgCleanString(data.name)
-    : pgCleanString(addressFormatted);
+    ? data.name
+    : addressFormatted;
+
   const params = [
     user.userParams.Username,
     name,
-    pgCleanString(JSON.stringify(address))
+    data.description,
+    JSON.stringify(address),
   ]
+
   const location = await geocode(address);
   // logDebug({location})
+
   const {latLng: {lat, lng}} = location;
 
   const sql = `
     INSERT INTO ${resourceTables.main} (
       name, 
+      description,
       address_json, 
       latlng,
       created_at,
@@ -49,7 +54,7 @@ const createResource = async (user, data) => {
       updated_at,
       updated_by
     )
-    VALUES ($2, $3, ARRAY[${lat}, ${lng}], NOW(), $1, NOW(), $1)
+    VALUES ($2, $3, $4, ARRAY[${lat}, ${lng}], NOW(), $1, NOW(), $1)
     RETURNING *
   `;
 
