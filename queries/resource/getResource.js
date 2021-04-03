@@ -7,7 +7,17 @@ const resourceTables = constants.tables.resource;
 const getResource = async (id) => {
   const label = 'get resource by id';
   const sql = `
-    SELECT id, name, address_json, latlng
+    SELECT 
+      id, 
+      name, 
+      business_name,
+      website,
+      email,
+      phone,
+      fax,
+      description, 
+      address_json, 
+      latlng
     FROM ${resourceTables.main}
     WHERE id = $1
   `;
