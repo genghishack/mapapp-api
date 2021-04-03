@@ -34,6 +34,11 @@ const createResource = async (user, data) => {
   const params = [
     user.userParams.Username,
     name,
+    data.business,
+    data.website,
+    data.email,
+    data.phone,
+    data.fax,
     data.description,
     JSON.stringify(address),
   ]
@@ -46,6 +51,11 @@ const createResource = async (user, data) => {
   const sql = `
     INSERT INTO ${resourceTables.main} (
       name, 
+      business,
+      website,
+      email,
+      phone,
+      fax,
       description,
       address_json, 
       latlng,
