@@ -18,9 +18,21 @@ const listResourcesByOwner = async (user, id) => {
   }
 }
 
+const listPublicResources = async (user) => {
+  let publicResources = [];
+  try {
+    publicResources = await resourceQuery.getPublicResources();
+    logDebug({publicResources});
+    return success({data: publicResources, count: publicResources.length});
+  } catch (e) {
+    return failure(e);
+  }
+}
+
 const actionHandlers = {
   GET: {
     user: listResourcesByOwner,
+    public: listPublicResources,
   },
 };
 

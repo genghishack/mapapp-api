@@ -4,6 +4,8 @@ import {isAdmin} from "../../../lib/user-lib";
 import * as resourceQuery from '../../../queries/resource-queries';
 
 async function getResource(user, id) {
+  // TODO: limit use to admin, editor or owner of resource.
+  //  this is not currently in use.
   let resource = {};
   try {
     resource = await resourceQuery.getResource(id);
@@ -15,9 +17,8 @@ async function getResource(user, id) {
 }
 
 async function deleteResource(user, id) {
-  if (!isAdmin(user)) {
-    return noAccess();
-  }
+  if (!isAdmin(user)) return noAccess();
+
   // uses id
   const message = 'deleted resource';
   logDebug(message);
@@ -26,9 +27,8 @@ async function deleteResource(user, id) {
 }
 
 async function editResource(user, id, data) {
-  if (!isAdmin(user)) {
-    return noAccess();
-  }
+  if (!isAdmin(user)) return noAccess();
+
   // uses id, data
   const message = 'edited resource';
   logDebug(message);
@@ -37,9 +37,8 @@ async function editResource(user, id, data) {
 }
 
 async function replaceResource(user, id, data) {
-  if (!isAdmin(user)) {
-    return noAccess();
-  }
+  if (!isAdmin(user)) return noAccess();
+
   // uses user, id
   const message = 'replaced resource';
   logDebug(message);

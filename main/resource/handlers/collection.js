@@ -1,12 +1,10 @@
 import {success, failure, noAccess} from '../../../lib/response-lib';
 import {logDebug} from "../../../lib/logging-lib";
-import {isAdmin, isEditor} from '../../../lib/user-lib';
+import {isAdmin, isUser} from '../../../lib/user-lib';
 import * as resourceQuery from '../../../queries/resource-queries';
 
 async function createResource(user, id, data) {
-  if (!isAdmin(user) && !isEditor(user)) {
-    return noAccess();
-  }
+  if (!isUser(user)) return noAccess();
 
   let resource = {};
   try {
@@ -18,6 +16,8 @@ async function createResource(user, id, data) {
 }
 
 async function listResources(user, id, data, params) {
+  if (!isAdmin(user)) return noAccess();
+
   let resources = [];
   try {
     resources = await resourceQuery.getResources();
