@@ -1,12 +1,12 @@
 import {success, failure, noAccess} from '../../../lib/response-lib';
 import {logDebug, logError} from "../../../lib/logging-lib";
 import {isAdmin} from "../../../lib/user-lib";
-import * as resourceLib from '../../../queries/resource-queries';
+import * as resourceQuery from '../../../queries/resource-queries';
 
 async function getResource(user, id) {
   let resource = {};
   try {
-    resource = await resourceLib.getResource(id);
+    resource = await resourceQuery.getResource(id);
     // logDebug({resource});
     return success({data: resource, count: 1});
   } catch (e) {

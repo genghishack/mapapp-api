@@ -1,12 +1,12 @@
-import {pgQuery} from "../../lib/postgres-lib";
 import {reject} from "../../lib/error-lib";
+import {pgQuery} from "../../lib/postgres-lib";
 import constants from "../../constants";
 
 const resourceTables = constants.tables.resource;
 
-const getResources = async () => {
-  const label = 'list resources';
-  const params = [];
+const getResourcesByOwner = async (userId) => {
+  const label = 'get resources by owner';
+  const params = [userId];
   const sql = `
     SELECT 
       id, 
@@ -20,6 +20,7 @@ const getResources = async () => {
       address_json, 
       latlng
     FROM ${resourceTables.main}
+    WHERE created_by = $1
   `;
 
   try {
@@ -27,6 +28,6 @@ const getResources = async () => {
   } catch (e) {
     return reject(e);
   }
-};
+}
 
-export default getResources;
+export default getResourcesByOwner;
