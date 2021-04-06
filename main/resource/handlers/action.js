@@ -3,6 +3,7 @@ import {isAdmin, isGuest} from "../../../lib/user-lib";
 import {logDebug} from "../../../lib/logging-lib";
 import * as resourceQuery from '../../../queries/resource-queries';
 
+// TODO: Since this uses userId it should be moved to a user endpoint
 const listResourcesByOwner = async (user, id) => {
   if (isGuest(user)) return noAccess();
   const {userParams: {Username: userId}} = user;
@@ -29,11 +30,31 @@ const listPublicResources = async (user) => {
   }
 }
 
+const submitResourceForApproval = async (user, id) => {
+  if (isGuest(user)) return noAccess();
+  logDebug({user});
+  const {userParams: {Username: userId}} = user;
+
+  let resource = {};
+  try {
+    resource = await resourceQuery.getResource(id);
+    if (resource) {
+      resource = await resourceQuery.updateResource(userId, id, {submitted_for_approval: true})
+    }
+    return success({data: resource, count: 1})
+  } catch (e) {
+    return failure(e);
+  }
+}
+
 const actionHandlers = {
   GET: {
     user: listResourcesByOwner,
     public: listPublicResources,
   },
+  PATCH: {
+    submit: submitResourceForApproval,
+  }
 };
 
 export default actionHandlers;
