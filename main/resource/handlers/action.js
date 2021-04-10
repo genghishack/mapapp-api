@@ -39,7 +39,7 @@ const submitResourceForApproval = async (user, id) => {
   try {
     resource = await resourceQuery.getResource(id);
     if (resource) {
-      resource = await resourceQuery.updateResource(userId, id, {submitted_for_approval: true})
+      [resource] = await resourceQuery.updateResource(userId, id, {submitted_for_approval: true})
     }
     return success({data: resource, count: 1})
   } catch (e) {
