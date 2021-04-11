@@ -1,25 +1,32 @@
 import {pgQuery} from "../../lib/postgres-lib";
 import {reject} from "../../lib/error-lib";
 import constants from "../../constants";
+import {resourceColumns} from "./common";
 
 const resourceTables = constants.tables.resource;
 
-const updateResource = async (user, id, data) => {
+const updateResource = async (userId, id, data) => {
   const label = 'update resource';
-  let name = '';
+  const params = [userId, id];
+  const updateClause = [
+    'updated_by = $1',
+    'updated_at = NOW()',
+  ];
 
-  let params = []
-
-  if (data.name) {
-    name = data.name.replace(/'/g, "''");
-  }
+  Object.keys(data).forEach((key) => {
+    params.push(data[key]);
+    updateClause.push(`${key} = $${params.length}`)
+  })
 
   const sql = `
-    SELECT 'no-op';
+    UPDATE ${resourceTables.main}
+    SET ${updateClause.join(', ')}
+    WHERE id = $2
+    RETURNING ${resourceColumns}
   `;
 
   try {
-    return await pgQuery(sql, params, label);
+    return pgQuery(sql, params, label);
   } catch (e) {
     return reject(e);
   }
