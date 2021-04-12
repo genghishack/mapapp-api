@@ -8,6 +8,7 @@ const getResourcesByOwner = async (userId) => {
   const sql = `
     ${selectResource}
     WHERE created_by = $1
+    ORDER BY name ASC;
   `;
 
   try {

@@ -1,15 +1,21 @@
 import {success, failure, noAccess} from '../../../lib/response-lib';
-import {logDebug, logError} from "../../../lib/logging-lib";
-import {isAdmin} from "../../../lib/user-lib";
+import {logDebug} from "../../../lib/logging-lib";
+import {isAdmin, isEditor, isGuest, isUser} from "../../../lib/user-lib";
 import * as resourceQuery from '../../../queries/resource-queries';
 
 async function getResource(user, id) {
-  // TODO: limit use to admin, editor or owner of resource.
-  //  this is not currently in use.
+  if (isGuest(user)) return noAccess();
+
+  let ownerId = '';
   let resource = {};
   try {
-    resource = await resourceQuery.getResource(id);
-    // logDebug({resource});
+    if (isUser(user)) {
+      ownerId = await resourceQuery.getResourceOwner(id);
+    }
+    if (isAdmin(user) || isEditor(user) || user.id === ownerId) {
+      resource = await resourceQuery.getResource(id);
+      // logDebug({resource});
+    }
     return success({data: resource, count: 1});
   } catch (e) {
     return failure(e);
@@ -17,13 +23,24 @@ async function getResource(user, id) {
 }
 
 async function deleteResource(user, id) {
-  if (!isAdmin(user)) return noAccess();
+  if (isGuest(user)) return noAccess();
+  const {userParams: {Username: userId}} = user;
 
-  // uses id
-  const message = 'deleted resource';
-  logDebug(message);
-  const response = success({data: message});
-  return response;
+  let ownerId = '';
+  let resource = {};
+  try {
+    if (isUser(user) || isEditor(user)) {
+      ownerId = await resourceQuery.getResourceOwner(id);
+      logDebug({ownerId});
+    }
+    if (isAdmin(user) || userId === ownerId) {
+      resource = await  resourceQuery.deleteResource(id);
+      // logDebug({resource});
+    }
+    return success({data: resource, count: 1});
+  } catch (e) {
+    return failure(e);
+  }
 }
 
 async function editResource(user, id, data) {

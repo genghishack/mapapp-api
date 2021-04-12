@@ -8,6 +8,7 @@ const getPublicResources = async () => {
   const sql = `
     ${selectResource}
     WHERE approved_for_public = true
+    ORDER BY name ASC;
   `;
 
   try {

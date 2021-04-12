@@ -5,7 +5,10 @@ import {selectResource} from "./common";
 const getResources = async () => {
   const label = 'list resources';
   const params = [];
-  const sql = selectResource;
+  const sql = `
+    ${selectResource}
+    ORDER BY name DESC;
+  `;
 
   try {
     return pgQuery(sql, params, label);
