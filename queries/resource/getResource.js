@@ -7,7 +7,7 @@ const getResource = async (id) => {
   const params = [id];
   const sql = `
     ${selectResource}
-    WHERE id = $1
+    WHERE id = $1;
   `;
 
   try {
