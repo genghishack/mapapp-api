@@ -34,8 +34,10 @@ async function deleteResource(user, id) {
       logDebug({ownerId});
     }
     if (isAdmin(user) || userId === ownerId) {
-      resource = await  resourceQuery.deleteResource(id);
+      resource = await resourceQuery.deleteResource(id);
       // logDebug({resource});
+    } else {
+      return noAccess();
     }
     return success({data: resource, count: 1});
   } catch (e) {
@@ -44,13 +46,25 @@ async function deleteResource(user, id) {
 }
 
 async function editResource(user, id, data) {
-  if (!isAdmin(user)) return noAccess();
+  if (isGuest(user)) return noAccess();
 
-  // uses id, data
-  const message = 'edited resource';
-  logDebug(message);
-  const response = success({data: message});
-  return response;
+  let ownerId = '';
+  let resource = {};
+  try {
+    if (isUser(user) || isEditor(user)) {
+      ownerId = await resourceQuery.getResourceOwner(id);
+      logDebug({ownerId});
+    }
+    if (isAdmin(user) || user.id === ownerId) {
+      resource = await resourceQuery.updateResource(user.id, id, data);
+      // logDebug({resource});
+    } else {
+      return noAccess();
+    }
+    return success({data: resource, count: 1});
+  } catch (e) {
+    return failure(e);
+  }
 }
 
 async function replaceResource(user, id, data) {

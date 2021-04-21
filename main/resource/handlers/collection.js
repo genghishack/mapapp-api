@@ -1,10 +1,10 @@
 import {success, failure, noAccess} from '../../../lib/response-lib';
 import {logDebug} from "../../../lib/logging-lib";
-import {isAdmin, isUser} from '../../../lib/user-lib';
+import {isAdmin, isGuest} from '../../../lib/user-lib';
 import * as resourceQuery from '../../../queries/resource-queries';
 
 async function createResource(user, id, data) {
-  if (!isUser(user)) return noAccess();
+  if (isGuest(user)) return noAccess();
 
   let resource = {};
   try {
