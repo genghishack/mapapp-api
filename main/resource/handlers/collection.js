@@ -4,7 +4,7 @@ import {isAdmin, isUser} from '../../../lib/user-lib';
 import * as resourceQuery from '../../../queries/resource-queries';
 
 async function createResource(user, id, data) {
-  if (!isUser(user)) return noAccess();
+  if (isGuest(user)) return noAccess();
 
   let resource = {};
   try {

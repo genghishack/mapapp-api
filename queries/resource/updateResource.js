@@ -6,7 +6,11 @@ import {resourceColumns} from "./common";
 const resourceTables = constants.tables.resource;
 
 const updateResource = async (userId, id, data) => {
+  if (!data.address) {
+    return reject(new Error('No address provided'))
+  }
   const label = 'update resource';
+
   const params = [userId, id];
   const updateClause = [
     'updated_by = $1',
@@ -14,8 +18,16 @@ const updateResource = async (userId, id, data) => {
   ];
 
   Object.keys(data).forEach((key) => {
-    params.push(data[key]);
-    updateClause.push(`${key} = $${params.length}`)
+    if (key === 'address') {
+      params.push(JSON.stringify(data.address));
+      updateClause.push(`address_json = $${params.length}`)
+    } else if (key === 'business') {
+      params.push(data.business);
+      updateClause.push(`business_name = $${params.length}`)
+    } else {
+      params.push(data[key]);
+      updateClause.push(`${key} = $${params.length}`)
+    }
   })
 
   const sql = `
