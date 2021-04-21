@@ -1,13 +1,21 @@
 import {success, failure, noAccess} from '../../../lib/response-lib';
-import {logDebug, logError} from "../../../lib/logging-lib";
-import {isAdmin} from "../../../lib/user-lib";
-import * as resourceLib from '../../../queries/resource-queries';
+import {logDebug} from "../../../lib/logging-lib";
+import {isAdmin, isEditor, isGuest, isUser} from "../../../lib/user-lib";
+import * as resourceQuery from '../../../queries/resource-queries';
 
 async function getResource(user, id) {
+  if (isGuest(user)) return noAccess();
+
+  let ownerId = '';
   let resource = {};
   try {
-    resource = await resourceLib.getResource(id);
-    // logDebug({resource});
+    if (isUser(user)) {
+      ownerId = await resourceQuery.getResourceOwner(id);
+    }
+    if (isAdmin(user) || isEditor(user) || user.id === ownerId) {
+      resource = await resourceQuery.getResource(id);
+      // logDebug({resource});
+    }
     return success({data: resource, count: 1});
   } catch (e) {
     return failure(e);
@@ -15,31 +23,53 @@ async function getResource(user, id) {
 }
 
 async function deleteResource(user, id) {
-  if (!isAdmin(user)) {
-    return noAccess();
+  if (isGuest(user)) return noAccess();
+  const {userParams: {Username: userId}} = user;
+
+  let ownerId = '';
+  let resource = {};
+  try {
+    if (isUser(user) || isEditor(user)) {
+      ownerId = await resourceQuery.getResourceOwner(id);
+      logDebug({ownerId});
+    }
+    if (isAdmin(user) || userId === ownerId) {
+      resource = await resourceQuery.deleteResource(id);
+      // logDebug({resource});
+    } else {
+      return noAccess();
+    }
+    return success({data: resource, count: 1});
+  } catch (e) {
+    return failure(e);
   }
-  // uses id
-  const message = 'deleted resource';
-  logDebug(message);
-  const response = success({data: message});
-  return response;
 }
 
 async function editResource(user, id, data) {
-  if (!isAdmin(user)) {
-    return noAccess();
+  if (isGuest(user)) return noAccess();
+
+  let ownerId = '';
+  let resource = {};
+  try {
+    if (isUser(user) || isEditor(user)) {
+      ownerId = await resourceQuery.getResourceOwner(id);
+      logDebug({ownerId});
+    }
+    if (isAdmin(user) || user.id === ownerId) {
+      resource = await resourceQuery.updateResource(user.id, id, data);
+      // logDebug({resource});
+    } else {
+      return noAccess();
+    }
+    return success({data: resource, count: 1});
+  } catch (e) {
+    return failure(e);
   }
-  // uses id, data
-  const message = 'edited resource';
-  logDebug(message);
-  const response = success({data: message});
-  return response;
 }
 
 async function replaceResource(user, id, data) {
-  if (!isAdmin(user)) {
-    return noAccess();
-  }
+  if (!isAdmin(user)) return noAccess();
+
   // uses user, id
   const message = 'replaced resource';
   logDebug(message);
