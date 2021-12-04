@@ -1,6 +1,6 @@
 import {success, noAccess, failure} from '../../../lib/response-lib';
 import {logDebug} from "../../../lib/logging-lib";
-import {isAdmin} from "../../../lib/user-lib";
+import {isAdmin, isGuest} from "../../../lib/user-lib";
 import * as categoryQuery from "../../../queries/category-queries";
 
 async function createCategory(user, id, data) {
