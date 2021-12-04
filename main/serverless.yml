@@ -119,3 +119,22 @@ functions:
           method: any
           cors: true
           authorizer: aws_iam
+  category:
+    handler: category/router.main
+    description: Endpoints for accessing category data
+    events:
+      - http:
+          path: category
+          method: any
+          cors: true
+          authorizer: aws_iam
+      - http:
+          path: category/{action}
+          method: any
+          cors: true
+          authorizer: aws_iam
+      - http:
+          path: category/{action}/{id}
+          method: any
+          cors: true
+          authorizer: aws_iam

@@ -12,6 +12,9 @@ export default {
     },
     user: {
       main: 'app_user'
+    },
+    category: {
+      main: 'gis_category'
     }
   }
 };
