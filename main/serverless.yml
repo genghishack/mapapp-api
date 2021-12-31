@@ -1,4 +1,4 @@
-service: mapapp-main
+service: mapapp
 
 # Use the serverless-webpack plugin to transpile ES6
 plugins:
@@ -62,25 +62,6 @@ provider:
       Resource: '*'
 
 functions:
-  foo:
-    handler: foo/router.main
-    description: No-op template for API endpoints
-    events:
-      - http:
-          path: foo
-          method: any
-          cors: true
-          authorizer: aws_iam
-      - http:
-          path: foo/{action}
-          method: any
-          cors: true
-          authorizer: aws_iam
-      - http:
-          path: foo/{action}/{id}
-          method: any
-          cors: true
-          authorizer: aws_iam
   user:
     handler: user/router.main
     description: Endpoints for accessing user data
