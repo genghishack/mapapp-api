@@ -1,8 +1,5 @@
 import {pgQuery} from "../../lib/postgres-lib";
 import {reject} from "../../lib/error-lib";
-import constants from "../../constants";
-
-const categoryTables = constants.tables.category;
 
 const createCategory = async (user, data) => {
   if (!data.name) {
@@ -18,14 +15,15 @@ const createCategory = async (user, data) => {
   ]
 
   const sql = `
-    INSERT INTO ${categoryTables.main} (
+    INSERT INTO app.gis_category (
       name,
+      properties_json,
       created_at,
       created_by,
       updated_at,
       updated_by
     )
-    VALUES ($2, NOW(), $1, NOW(), $1)
+    VALUES ($2, '{}', NOW(), $1, NOW(), $1)
     RETURNING *
   `;
 

@@ -1,8 +1,5 @@
 import {pgQuery} from "../../lib/postgres-lib";
 import {reject} from "../../lib/error-lib";
-import constants from "../../constants";
-
-const categoryTables = constants.tables.category;
 
 const updateCategory = async (userId, id, data) => {
   const label = 'update category';
@@ -19,7 +16,7 @@ const updateCategory = async (userId, id, data) => {
   })
 
   const sql = `
-    UPDATE ${categoryTables.main}
+    UPDATE app.gis_category
     SET ${updateClause.join(', ')}
     WHERE id = $2
     RETURNING *

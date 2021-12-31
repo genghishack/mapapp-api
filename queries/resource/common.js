@@ -1,23 +1,22 @@
-import constants from "../../constants";
-
-const resourceTables = constants.tables.resource;
-
 export const resourceColumns = `
       id, 
-      name, 
-      business_name,
-      website,
-      email,
-      phone,
-      fax,
+      status_id,
+      name_json,
+      address_json,
+      phone_json,
+      internet_json,
+      other_json,
       description,
-      address_json, 
-      latlng,
-      approved_for_public,
-      submitted_for_approval
+      lat, 
+      lng,
+      shape,
+      created_at,
+      created_by,
+      updated_at,
+      updated_by
 `;
 
 export const selectResource = `
     SELECT ${resourceColumns}
-    FROM ${resourceTables.main}
+    FROM app.gis_resource
 `;

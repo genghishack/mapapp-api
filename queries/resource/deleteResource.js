@@ -1,15 +1,12 @@
 import {pgQuery} from "../../lib/postgres-lib";
-import constants from "../../constants";
 import {reject} from "../../lib/error-lib";
-
-const resourceTables = constants.tables.resource;
 
 const deleteResource = async (id) => {
   const label = 'delete resource';
   const params = [id];
 
   const sql = `
-    DELETE FROM ${resourceTables.main}
+    DELETE FROM app.gis_resource
     WHERE id = $1
     RETURNING *;
   `;
