@@ -15,9 +15,9 @@ package:
 # Enable auto-packing of external modules
 custom:
   webpack:
-    webpackConfig: ../webpack.config.js
+    webpackConfig: ./webpack.config.js
     includeModules:
-      packagePath: ../package.json
+      packagePath: ./package.json
 
 provider:
   name: aws
@@ -63,7 +63,7 @@ provider:
 
 functions:
   user:
-    handler: user/router.main
+    handler: endpoints/user/router.main
     description: Endpoints for accessing user data
     events:
       - http:
@@ -82,7 +82,7 @@ functions:
           cors: true
           authorizer: aws_iam
   resource:
-    handler: resource/router.main
+    handler: endpoints/resource/router.main
     description: Endpoints for accessing resource data
     events:
       - http:
@@ -101,7 +101,7 @@ functions:
           cors: true
           authorizer: aws_iam
   category:
-    handler: category/router.main
+    handler: endpoints/category/router.main
     description: Endpoints for accessing category data
     events:
       - http:
