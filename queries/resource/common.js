@@ -17,6 +17,6 @@ export const resourceColumns = `
 `;
 
 export const selectResource = `
-    SELECT ${resourceColumns}
-    FROM app.gis_resource
+    SELECT *
+    FROM app.v_gis_resource
 `;
