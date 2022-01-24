@@ -16,7 +16,7 @@ async function createCategory(user, id, data) {
 }
 
 async function listCategories(user) {
-  if (isGuest(user)) return noAccess();
+  // if (isGuest(user)) return noAccess();
 
   let categories = [];
   try {

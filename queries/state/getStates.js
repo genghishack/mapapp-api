@@ -1,12 +1,12 @@
 import {pgQuery} from "../../lib/postgres-lib";
 import {reject} from "../../lib/error-lib";
 
-const getCategories = async () => {
-  const label = 'list categories';
+const getStates = async () => {
+  const label = 'list states';
   const params = [];
   const sql = `
     SELECT *
-    FROM app.gis_category
+    FROM layer_mgt.state_lookup
     ORDER BY name DESC;
   `;
 
@@ -17,4 +17,4 @@ const getCategories = async () => {
   }
 };
 
-export default getCategories;
+export default getStates;

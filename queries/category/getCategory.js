@@ -5,7 +5,7 @@ const getCategory = async (id) => {
   const label = 'get resource by id';
   const params = [id];
   const sql = `
-    SELECT id, name
+    SELECT *
     FROM app.gis_category
     WHERE id = $1;
   `;

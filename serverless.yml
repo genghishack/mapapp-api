@@ -119,3 +119,22 @@ functions:
           method: any
           cors: true
           authorizer: aws_iam
+  state:
+    handler: endpoints/state/router.main
+    description: Endpoints for accessing state data
+    events:
+      - http:
+          path: state
+          method: any
+          cors: true
+          authorizer: aws_iam
+      - http:
+          path: state/{action}
+          method: any
+          cors: true
+          authorizer: aws_iam
+      - http:
+          path: state/{action}/{id}
+          method: any
+          cors: true
+          authorizer: aws_iam
