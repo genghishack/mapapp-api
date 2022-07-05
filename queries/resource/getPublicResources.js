@@ -7,8 +7,8 @@ const getPublicResources = async () => {
   const params = [];
   const sql = `
     ${selectResource}
-    WHERE approved_for_public = true
-    ORDER BY name ASC;
+    --WHERE approved_for_public = true
+    --ORDER BY name ASC;
   `;
 
   try {

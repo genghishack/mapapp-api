@@ -1,15 +1,12 @@
 import {pgQuery} from "../../lib/postgres-lib";
-import constants from "../../constants";
 import {reject} from "../../lib/error-lib";
-
-const categoryTables = constants.tables.category;
 
 const deleteCategory = async (id) => {
   const label = 'delete category';
   const params = [id];
 
   const sql = `
-    DELETE FROM ${categoryTables.main}
+    DELETE FROM app.gis_category
     WHERE id = $1
     RETURNING *;
   `;

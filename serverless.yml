@@ -1,4 +1,4 @@
-service: mapapp-main
+service: mapapp
 
 # Use the serverless-webpack plugin to transpile ES6
 plugins:
@@ -15,9 +15,9 @@ package:
 # Enable auto-packing of external modules
 custom:
   webpack:
-    webpackConfig: ../webpack.config.js
+    webpackConfig: ./webpack.config.js
     includeModules:
-      packagePath: ../package.json
+      packagePath: ./package.json
 
 provider:
   name: aws
@@ -62,27 +62,8 @@ provider:
       Resource: '*'
 
 functions:
-  foo:
-    handler: foo/router.main
-    description: No-op template for API endpoints
-    events:
-      - http:
-          path: foo
-          method: any
-          cors: true
-          authorizer: aws_iam
-      - http:
-          path: foo/{action}
-          method: any
-          cors: true
-          authorizer: aws_iam
-      - http:
-          path: foo/{action}/{id}
-          method: any
-          cors: true
-          authorizer: aws_iam
   user:
-    handler: user/router.main
+    handler: endpoints/user/router.main
     description: Endpoints for accessing user data
     events:
       - http:
@@ -101,7 +82,7 @@ functions:
           cors: true
           authorizer: aws_iam
   resource:
-    handler: resource/router.main
+    handler: endpoints/resource/router.main
     description: Endpoints for accessing resource data
     events:
       - http:
@@ -120,7 +101,7 @@ functions:
           cors: true
           authorizer: aws_iam
   category:
-    handler: category/router.main
+    handler: endpoints/category/router.main
     description: Endpoints for accessing category data
     events:
       - http:
@@ -135,6 +116,25 @@ functions:
           authorizer: aws_iam
       - http:
           path: category/{action}/{id}
+          method: any
+          cors: true
+          authorizer: aws_iam
+  state:
+    handler: endpoints/state/router.main
+    description: Endpoints for accessing state data
+    events:
+      - http:
+          path: state
+          method: any
+          cors: true
+          authorizer: aws_iam
+      - http:
+          path: state/{action}
+          method: any
+          cors: true
+          authorizer: aws_iam
+      - http:
+          path: state/{action}/{id}
           method: any
           cors: true
           authorizer: aws_iam

@@ -1,8 +1,5 @@
 import {pgCleanString, pgQuery} from "../../lib/postgres-lib";
 import {reject} from "../../lib/error-lib";
-import constants from "../../constants";
-
-const userTables = constants.tables.user;
 
 const updateUser = async (adminUser, user) => {
   const label = 'update user';
@@ -15,7 +12,7 @@ const updateUser = async (adminUser, user) => {
     adminUser.userParams.Username,
   ]
   const sql = `
-    UPDATE ${userTables.main}
+    UPDATE app.user
     SET
       email = $2,
       name = $3,

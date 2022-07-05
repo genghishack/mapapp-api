@@ -1,10 +1,7 @@
 import {pgQuery} from "../../lib/postgres-lib";
 import {reject} from "../../lib/error-lib";
-import constants from "../../constants";
 import {resourceColumns} from "./common";
 import {geocode} from "../../lib/gis-lib";
-
-const resourceTables = constants.tables.resource;
 
 const updateResource = async (userId, id, data) => {
   const label = 'update resource';
@@ -15,42 +12,51 @@ const updateResource = async (userId, id, data) => {
     'updated_at = NOW()',
   ];
 
+  const name_json = {
+    name_full: data.name,
+    name_business: data.business,
+  }
+
+  const address_json = {...data.address};
+
+  const phone_json = {
+    main: data.phone_main,
+    fax: data.phone_fax,
+    cell: data.phone_cell,
+  }
+
+  const internet_json = {
+    web: data.website,
+    email: data.email,
+  }
+
+  const other_json = {}; // TODO: get "other" data from front end
+
   if (data.address) {
-    const {address} = data;
-    const addressArray = [];
-    [
-      address.street_1,
-      address.street_2,
-      address.city,
-      address.state,
-      address.country,
-      address.postalCode
-    ].forEach(item => {
-      if (item && item.trim() !== '') {
-        addressArray.push(item);
-      }
-    })
-    const addressFormatted = addressArray.join(', ');
-
-    const name = data.name
-      ? data.name
-      : addressFormatted;
-
     const location = await geocode(address);
     // logDebug({location})
 
     const {latLng: {lat, lng}} = location;
 
-    updateClause.push(`latlng = ARRAY[${lat}, ${lng}]`);
+    updateClause.push(`lat = ${lat}`, `lng = ${lng}`);
   }
 
   Object.keys(data).forEach((key) => {
-    if (key === 'address') {
-      params.push(JSON.stringify(data.address));
+    if (key === 'name') {
+      params.push(JSON.stringify(name_json));
+      updateClause.push(`name_json = $${params.length}`)
+    } else if (key === 'address') {
+      params.push(JSON.stringify(address_json));
       updateClause.push(`address_json = $${params.length}`)
-    } else if (key === 'business') {
-      params.push(data.business);
-      updateClause.push(`business_name = $${params.length}`)
+    } else if (key === 'phone') {
+      params.push(JSON.stringify(phone_json));
+      updateClause.push(`phone_json = $${params.length}`)
+    } else if (key === 'internet') {
+      params.push(JSON.stringify(internet_json));
+      updateClause.push(`internet_json = $${params.length}`)
+    } else if (key === 'other') {
+      params.push(JSON.stringify(other_json));
+      updateClause.push(`phone_json = $${params.length}`)
     } else {
       params.push(data[key]);
       updateClause.push(`${key} = $${params.length}`)
@@ -58,7 +64,7 @@ const updateResource = async (userId, id, data) => {
   })
 
   const sql = `
-    UPDATE ${resourceTables.main}
+    UPDATE app.gis_resource
     SET ${updateClause.join(', ')}
     WHERE id = $2
     RETURNING ${resourceColumns}

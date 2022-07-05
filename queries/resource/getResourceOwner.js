@@ -1,9 +1,6 @@
-import constants from "../../constants";
 import {pgQuery} from "../../lib/postgres-lib";
 import {reject} from "../../lib/error-lib";
 import {logDebug} from "../../lib/logging-lib";
-
-const resourceTables = constants.tables.resource;
 
 const getResourceOwner = async (id) => {
   const label = 'get resource owner';
@@ -11,7 +8,7 @@ const getResourceOwner = async (id) => {
 
   const sql = `
     SELECT created_by
-    FROM ${resourceTables.main}
+    FROM app.gis_resource
     WHERE id = $1
   `;
 

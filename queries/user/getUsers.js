@@ -1,8 +1,5 @@
 import {pgQuery} from "../../lib/postgres-lib";
 import {reject} from "../../lib/error-lib";
-import constants from "../../constants";
-
-const userTables = constants.tables.user;
 
 const getUsers = async (userIds = []) => {
   const label = 'list users';
@@ -17,7 +14,7 @@ const getUsers = async (userIds = []) => {
   }
 
   const sql = `
-    SELECT * from ${userTables.main}
+    SELECT * from app.user
     ${whereClause};
   `;
 

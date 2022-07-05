@@ -67,6 +67,7 @@ Session.vim
 # Serverless
 .webpack
 .serverless
+.build
 
 # env
 env.yml
