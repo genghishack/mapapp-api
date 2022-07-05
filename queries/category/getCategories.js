@@ -1,13 +1,13 @@
 import {pgQuery} from "../../lib/postgres-lib";
 import {reject} from "../../lib/error-lib";
-import {selectResource} from './common';
 
-const getResource = async (id) => {
-  const label = 'get resource by id';
-  const params = [id];
+const getCategories = async () => {
+  const label = 'list categories';
+  const params = [];
   const sql = `
-    ${selectResource}
-    WHERE id = $1;
+    SELECT *
+    FROM app.gis_category
+    ORDER BY name DESC;
   `;
 
   try {
@@ -17,4 +17,4 @@ const getResource = async (id) => {
   }
 };
 
-export default getResource;
+export default getCategories;

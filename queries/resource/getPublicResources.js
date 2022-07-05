@@ -2,12 +2,13 @@ import {pgQuery} from "../../lib/postgres-lib";
 import {reject} from "../../lib/error-lib";
 import {selectResource} from "./common";
 
-const getResources = async () => {
+const getPublicResources = async () => {
   const label = 'list resources';
   const params = [];
   const sql = `
     ${selectResource}
-    ORDER BY name DESC;
+    --WHERE approved_for_public = true
+    --ORDER BY name ASC;
   `;
 
   try {
@@ -17,4 +18,4 @@ const getResources = async () => {
   }
 };
 
-export default getResources;
+export default getPublicResources;

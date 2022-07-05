@@ -1,13 +1,13 @@
 import {pgQuery} from "../../lib/postgres-lib";
 import {reject} from "../../lib/error-lib";
-import {selectResource} from './common';
 
-const getResource = async (id) => {
-  const label = 'get resource by id';
-  const params = [id];
+const getStates = async () => {
+  const label = 'list states';
+  const params = [];
   const sql = `
-    ${selectResource}
-    WHERE id = $1;
+    SELECT *
+    FROM layer_mgt.state_lookup
+    ORDER BY name DESC;
   `;
 
   try {
@@ -17,4 +17,4 @@ const getResource = async (id) => {
   }
 };
 
-export default getResource;
+export default getStates;
